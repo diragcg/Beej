@@ -27,40 +27,23 @@
     
     body {
       font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
-      background-color: #f5f7fa;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 20px;
       margin: 0;
-      background-image: url('https://img.freepik.com/free-vector/hand-drawn-tribal-pattern_23-2149388752.jpg?w=2000');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      position: relative;
-    }
-    
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
-      z-index: -1;
     }
     
     .login-wrapper {
       width: 100%;
-      max-width: 500px;
-      z-index: 1;
+      max-width: 450px;
     }
     
     .login-card {
       background-color: white;
-      border-radius: 20px;
+      border-radius: 15px;
       box-shadow: 
         0 15px 25px var(--shadow-color),
         0 5px 10px rgba(0, 0, 0, 0.05),
@@ -69,22 +52,6 @@
       transform-style: preserve-3d;
       perspective: 1000px;
       transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .login-card::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 150px;
-      height: 150px;
-      background-image: url('https://img.freepik.com/free-vector/hand-drawn-wheat-grain-illustration_23-2149358982.jpg?w=826&t=st=1690594456~exp=1690595056~hmac=686e0a9a4c6b7ca962d83f9e0cb6d13d7b2d7b2b8b2f5b2b1b2f2b2b2b2f2b2b');
-      background-size: contain;
-      background-repeat: no-repeat;
-      opacity: 0.1;
-      z-index: 0;
     }
     
     .login-card:hover {
@@ -99,12 +66,10 @@
       text-align: center;
       margin-bottom: 30px;
       transform: translateZ(20px);
-      position: relative;
-      z-index: 1;
     }
     
     .login-logo img {
-      width: 100px;
+      width: 90px;
       margin-bottom: 15px;
       filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
     }
@@ -113,19 +78,15 @@
       font-weight: 700;
       color: var(--primary-color);
       margin-bottom: 5px;
-      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .login-logo p {
       color: #6c757d;
       font-size: 14px;
-      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .form-floating {
       margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
     }
     
     .form-floating label {
@@ -153,8 +114,6 @@
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
-      z-index: 1;
-      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .btn-login:hover {
@@ -179,7 +138,6 @@
       color: var(--primary-color);
       text-decoration: none;
       transition: all 0.3s ease;
-      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .forgot-password:hover {
@@ -192,29 +150,16 @@
       text-align: center;
       font-size: 13px;
       color: #6c757d;
-      position: relative;
-      z-index: 1;
-      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .user-type-selector {
       margin-bottom: 25px;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .user-type-selector label {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      font-weight: 500;
     }
     
     .alert-login {
       margin-bottom: 20px;
       border-radius: 10px;
       font-weight: 500;
-      position: relative;
-      z-index: 1;
-      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     /* 3D Effect for inputs */
@@ -225,39 +170,10 @@
       height: auto;
       font-size: 15px;
       transition: all 0.3s ease;
-      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .form-control:focus, .form-select:focus {
       transform: translateY(-2px);
-    }
-    
-    .form-check-label {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-    }
-    
-    .tech-support {
-      font-weight: 600;
-      color: #333;
-    }
-    
-    .seed-icon {
-      display: inline-block;
-      position: relative;
-      width: 100px;
-      height: 100px;
-      background-color: #f8f9fa;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      margin-bottom: 15px;
-    }
-    
-    .seed-icon img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 15px;
     }
   </style>
 </head>
@@ -265,10 +181,7 @@
   <div class="login-wrapper">
     <div class="login-card">
       <div class="login-logo">
-        <div class="seed-icon">
-          <img src="https://img.freepik.com/free-vector/hand-drawn-seeds-collection_23-2147783584.jpg?w=826&t=st=1690594523~exp=1690595123~hmac=d8c6e5f6a96a4b0b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b" alt="Seed Icon">
-        </div>
-        <h2>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</h2>
+        <h3>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल - लॉगिन</h3>
         <p>कृषि विभाग, छत्तीसगढ़ शासन</p>
       </div>
       
