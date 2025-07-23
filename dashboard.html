@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>बीज परीक्षण पोर्टल - डैशबोर्ड</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- DataTables CSS -->
+  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  
+  <!-- Noto Sans Devanagari font for Hindi -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+    
+    .sidebar {
+      min-height: 100vh;
+      background-color: #343a40;
+      padding-top: 20px;
+    }
+    
+    .sidebar .nav-link {
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: 5px;
+    }
+    
+    .sidebar .nav-link:hover {
+      color: white;
+    }
+    
+    .sidebar .nav-link.active {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    main {
+      padding: 20px;
+    }
+    
+    .navbar-brand img {
+      max-height: 30px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Emblem_of_Chhattisgarh.svg" alt="Logo">
+        बीज परीक्षण पोर्टल
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+              <i class="bi bi-person-circle"></i> Admin
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="#">प्रोफाइल</a></li>
+              <li><a class="dropdown-item" href="#">सेटिंग्स</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="index.html">लॉगआउट</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+        <div class="position-sticky pt-3">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                डैशबोर्ड
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                बीज नमूने
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                निरीक्षण प्रतिवेदन
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                प्रतिवेदन फॉर्म 2
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                प्रतिवेदन फॉर्म 3
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                रिपोर्ट्स
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                उपयोगकर्ता प्रबंधन
+              </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+
+      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">डैशबोर्ड</h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group me-2">
+              <button type="button" class="btn btn-sm btn-outline-secondary">शेयर</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">एक्सपोर्ट</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 mb-4">
+            <div class="card text-white bg-primary">
+              <div class="card-body">
+                <h5 class="card-title">कुल नमूने</h5>
+                <h1 class="display-4">156</h1>
+                <p class="card-text">पिछले महीने से +12%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3 mb-4">
+            <div class="card text-white bg-success">
+              <div class="card-body">
+                <h5 class="card-title">मानक नमूने</h5>
+                <h1 class="display-4">128</h1>
+                <p class="card-text">कुल का 82%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3 mb-4">
+            <div class="card text-white bg-danger">
+              <div class="card-body">
+                <h5 class="card-title">अमानक नमूने</h5>
+                <h1 class="display-4">28</h1>
+                <p class="card-text">कुल का 18%</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3 mb-4">
+            <div class="card text-white bg-info">
+              <div class="card-body">
+                <h5 class="card-title">प्रक्रियाधीन</h5>
+                <h1 class="display-4">42</h1>
+                <p class="card-text">अभी विश्लेषण हेतु शेष</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h2>हालिया नमूने</h2>
+        <div class="table-responsive">
+          <table class="table table-striped table-sm">
+            <thead>
+              <tr>
+                <th>क्र.</th>
+                <th>जिला</th>
+                <th>प्रस्तावित लक्ष्य</th>
+                <th>कुल नमूने</th>
+                <th>स्थिति</th>
+                <th>दिनांक</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>रायपुर</td>
+                <td>50</td>
+                <td>42</td>
+                <td><span class="badge bg-success">पूर्ण</span></td>
+                <td>15/07/2023</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>दुर्ग</td>
+                <td>45</td>
+                <td>38</td>
+                <td><span class="badge bg-warning text-dark">प्रक्रियाधीन</span></td>
+                <td>12/07/2023</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>बिलासपुर</td>
+                <td>40</td>
+                <td>35</td>
+                <td><span class="badge bg-success">पूर्ण</span></td>
+                <td>10/07/2023</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>राजनांदगांव</td>
+                <td>30</td>
+                <td>20</td>
+                <td><span class="badge bg-warning text-dark">प्रक्रियाधीन</span></td>
+                <td>08/07/2023</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>जगदलपुर</td>
+                <td>25</td>
+                <td>21</td>
+                <td><span class="badge bg-danger">अमानक</span></td>
+                <td>05/07/2023</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- jQuery and DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+</body>
+</html>
