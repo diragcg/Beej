@@ -249,6 +249,10 @@
       border-left: 4px solid #dc3545;
     }
     
+    .alert-login.alert-success {
+      border-left-color: #28a745;
+    }
+    
     /* Custom dropdown styling */
     .dropdown-menu {
       transform: translateY(10px) !important;
@@ -313,6 +317,10 @@
         font-size: 22px;
       }
     }
+    
+    .spinner-border-sm {
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
@@ -362,6 +370,26 @@
               <option value="deputy_director_मुंगेली">उप संचालक कृषि - मुंगेली</option>
               <option value="deputy_director_कोरबा">उप संचालक कृषि - कोरबा</option>
               <option value="deputy_director_रायगढ़">उप संचालक कृषि - रायगढ़</option>
+              <option value="deputy_director_जांजगीर">उप संचालक कृषि - जांजगीर</option>
+              <option value="deputy_director_सक्ती">उप संचालक कृषि - सक्ती</option>
+              <option value="deputy_director_सारंगढ़-बिलाईगढ़">उप संचालक कृषि - सारंगढ़-बिलाईगढ़</option>
+            </optgroup>
+            <optgroup label="जिला स्तर - सरगुजा संभाग">
+              <option value="deputy_director_सरगुजा">उप संचालक कृषि - सरगुजा</option>
+              <option value="deputy_director_सूरजपुर">उप संचालक कृषि - सूरजपुर</option>
+              <option value="deputy_director_बलरामपुर">उप संचालक कृषि - बलरामपुर</option>
+              <option value="deputy_director_कोरिया">उप संचालक कृषि - कोरिया</option>
+              <option value="deputy_director_मनेन्द्रगढ़-चिरमिरी">उप संचालक कृषि - मनेन्द्रगढ़-चिरमिरी</option>
+              <option value="deputy_director_जशपुर">उप संचालक कृषि - जशपुर</option>
+            </optgroup>
+            <optgroup label="जिला स्तर - बस्तर संभाग">
+              <option value="deputy_director_जगदलपुर">उप संचालक कृषि - जगदलपुर</option>
+              <option value="deputy_director_कोण्डागांव">उप संचालक कृषि - कोण्डागांव</option>
+              <option value="deputy_director_कांकेर">उप संचालक कृषि - कांकेर</option>
+              <option value="deputy_director_दंतेवाड़ा">उप संचालक कृषि - दंतेवाड़ा</option>
+              <option value="deputy_director_सुकमा">उप संचालक कृषि - सुकमा</option>
+              <option value="deputy_director_बीजापुर">उप संचालक कृषि - बीजापुर</option>
+              <option value="deputy_director_नारायणपुर">उप संचालक कृषि - नारायणपुर</option>
             </optgroup>
           </select>
         </div>
@@ -391,10 +419,244 @@
     </div>
   </div>
 
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
   <script>
+    // Initialize Supabase client
+    const SUPABASE_URL = 'https://evgmvktquwufhdevtahx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z212a3RxdXd1ZmhkZXZ0YWh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNjU0NTEsImV4cCI6MjA2ODg0MTQ1MX0.-JTBxxMms1U3H1nIzEQN54FEHKeHMP8HbUf7s3nIfIk';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    // User passwords
+    const userPasswords = {
+      'deputy_director_state': 'State@123',
+      'seed_certification_raipur': 'SeedCert@123',
+      'joint_director_रायपुर_संभाग': 'Raipur@123',
+      'joint_director_दुर्ग_संभाग': 'Durg@123',
+      'joint_director_बिलासपुर_संभाग': 'Bilaspur@123',
+      'joint_director_सरगुजा_संभाग': 'Surguja@123',
+      'joint_director_बस्तर_संभाग': 'Bastar@123',
+      'deputy_director_रायपुर': 'Raipur@123',
+      'deputy_director_गरियाबंद': 'Gariaband@123',
+      'deputy_director_बलौदाबाजार': 'Baloda@123',
+      'deputy_director_महासमुंद': 'Mahasamund@123',
+      'deputy_director_धमतरी': 'Dhamtari@123',
+      'deputy_director_दुर्ग': 'Durg@123',
+      'deputy_director_बालोद': 'Balod@123',
+      'deputy_director_बेमेतरा': 'Bemetara@123',
+      'deputy_director_कबीरधाम': 'Kabeerdham@123',
+      'deputy_director_राजनांदगांव': 'Rajnandgaon@123',
+      'deputy_director_बिलासपुर': 'Bilaspur@123',
+      'deputy_director_मुंगेली': 'Mungeli@123',
+      'deputy_director_कोरबा': 'Korba@123',
+      'deputy_director_रायगढ़': 'Raigarh@123',
+      'deputy_director_जांजगीर': 'Janjgir@123',
+      'deputy_director_सक्ती': 'Sakti@123',
+      'deputy_director_सारंगढ़-बिलाईगढ़': 'Sarangarh@123',
+      'deputy_director_सरगुजा': 'Surguja@123',
+      'deputy_director_सूरजपुर': 'Surajpur@123',
+      'deputy_director_बलरामपुर': 'Balrampur@123',
+      'deputy_director_कोरिया': 'Korea@123',
+      'deputy_director_मनेन्द्रगढ़-चिरमिरी': 'Manendragarh@123',
+      'deputy_director_जशपुर': 'Jashpur@123',
+      'deputy_director_जगदलपुर': 'Jagdalpur@123',
+      'deputy_director_कोण्डागांव': 'Kondagaon@123',
+      'deputy_director_कांकेर': 'Kanker@123',
+      'deputy_director_दंतेवाड़ा': 'Dantewada@123',
+      'deputy_director_सुकमा': 'Sukma@123',
+      'deputy_director_बीजापुर': 'Bijapur@123',
+      'deputy_director_नारायणपुर': 'Narayanpur@123'
+    };
+    
+    // User roles mapping
+    const userRoles = {
+      'deputy_director_state': 'state_admin',
+      'seed_certification_raipur': 'seed_certification_agency',
+      'joint_director_रायपुर_संभाग': 'division_officer',
+      'joint_director_दुर्ग_संभाग': 'division_officer',
+      'joint_director_बिलासपुर_संभाग': 'division_officer',
+      'joint_director_सरगुजा_संभाग': 'division_officer',
+      'joint_director_बस्तर_संभाग': 'division_officer',
+      'deputy_director_रायपुर': 'district_officer',
+      'deputy_director_गरियाबंद': 'district_officer',
+      'deputy_director_बलौदाबाजार': 'district_officer',
+      'deputy_director_महासमुंद': 'district_officer',
+      'deputy_director_धमतरी': 'district_officer',
+      'deputy_director_दुर्ग': 'district_officer',
+      'deputy_director_बालोद': 'district_officer',
+      'deputy_director_बेमेतरा': 'district_officer',
+      'deputy_director_कबीरधाम': 'district_officer',
+      'deputy_director_राजनांदगांव': 'district_officer',
+      'deputy_director_बिलासपुर': 'district_officer',
+      'deputy_director_मुंगेली': 'district_officer',
+      'deputy_director_कोरबा': 'district_officer',
+      'deputy_director_रायगढ़': 'district_officer',
+      'deputy_director_जांजगीर': 'district_officer',
+      'deputy_director_सक्ती': 'district_officer',
+      'deputy_director_सारंगढ़-बिलाईगढ़': 'district_officer',
+      'deputy_director_सरगुजा': 'district_officer',
+      'deputy_director_सूरजपुर': 'district_officer',
+      'deputy_director_बलरामपुर': 'district_officer',
+      'deputy_director_कोरिया': 'district_officer',
+      'deputy_director_मनेन्द्रगढ़-चिरमिरी': 'district_officer',
+      'deputy_director_जशपुर': 'district_officer',
+      'deputy_director_जगदलपुर': 'district_officer',
+      'deputy_director_कोण्डागांव': 'district_officer',
+      'deputy_director_कांकेर': 'district_officer',
+      'deputy_director_दंतेवाड़ा': 'district_officer',
+      'deputy_director_सुकमा': 'district_officer',
+      'deputy_director_बीजापुर': 'district_officer',
+      'deputy_director_नारायणपुर': 'district_officer'
+    };
+    
+    // Full names mapping
+    const userFullNames = {
+      'deputy_director_state': 'उप संचालक कृषि - राज्य स्तर',
+      'seed_certification_raipur': 'बीज प्रमाणीकरण संस्था, रायपुर',
+      'joint_director_रायपुर_संभाग': 'संयुक्त संचालक कृषि - रायपुर संभाग',
+      'joint_director_दुर्ग_संभाग': 'संयुक्त संचालक कृषि - दुर्ग संभाग',
+      'joint_director_बिलासपुर_संभाग': 'संयुक्त संचालक कृषि - बिलासपुर संभाग',
+      'joint_director_सरगुजा_संभाग': 'संयुक्त संचालक कृषि - सरगुजा संभाग',
+      'joint_director_बस्तर_संभाग': 'संयुक्त संचालक कृषि - बस्तर संभाग',
+      'deputy_director_रायपुर': 'उप संचालक कृषि - रायपुर',
+      'deputy_director_गरियाबंद': 'उप संचालक कृषि - गरियाबंद',
+      'deputy_director_बलौदाबाजार': 'उप संचालक कृषि - बलौदाबाजार',
+      'deputy_director_महासमुंद': 'उप संचालक कृषि - महासमुंद',
+      'deputy_director_धमतरी': 'उप संचालक कृषि - धमतरी',
+      'deputy_director_दुर्ग': 'उप संचालक कृषि - दुर्ग',
+      'deputy_director_बालोद': 'उप संचालक कृषि - बालोद',
+      'deputy_director_बेमेतरा': 'उप संचालक कृषि - बेमेतरा',
+      'deputy_director_कबीरधाम': 'उप संचालक कृषि - कबीरधाम',
+      'deputy_director_राजनांदगांव': 'उप संचालक कृषि - राजनांदगांव',
+      'deputy_director_बिलासपुर': 'उप संचालक कृषि - बिलासपुर',
+      'deputy_director_मुंगेली': 'उप संचालक कृषि - मुंगेली',
+      'deputy_director_कोरबा': 'उप संचालक कृषि - कोरबा',
+      'deputy_director_रायगढ़': 'उप संचालक कृषि - रायगढ़',
+      'deputy_director_जांजगीर': 'उप संचालक कृषि - जांजगीर',
+      'deputy_director_सक्ती': 'उप संचालक कृषि - सक्ती',
+      'deputy_director_सारंगढ़-बिलाईगढ़': 'उप संचालक कृषि - सारंगढ़-बिलाईगढ़',
+      'deputy_director_सरगुजा': 'उप संचालक कृषि - सरगुजा',
+      'deputy_director_सूरजपुर': 'उप संचालक कृषि - सूरजपुर',
+      'deputy_director_बलरामपुर': 'उप संचालक कृषि - बलरामपुर',
+      'deputy_director_कोरिया': 'उप संचालक कृषि - कोरिया',
+      'deputy_director_मनेन्द्रगढ़-चिरमिरी': 'उप संचालक कृषि - मनेन्द्रगढ़-चिरमिरी',
+      'deputy_director_जशपुर': 'उप संचालक कृषि - जशपुर',
+      'deputy_director_जगदलपुर': 'उप संचालक कृषि - जगदलपुर',
+      'deputy_director_कोण्डागांव': 'उप संचालक कृषि - कोण्डागांव',
+      'deputy_director_कांकेर': 'उप संचालक कृषि - कांकेर',
+      'deputy_director_दंतेवाड़ा': 'उप संचालक कृषि - दंतेवाड़ा',
+      'deputy_director_सुकमा': 'उप संचालक कृषि - सुकमा',
+      'deputy_director_बीजापुर': 'उप संचालक कृषि - बीजापुर',
+      'deputy_director_नारायणपुर': 'उप संचालक कृषि - नारायणपुर'
+    };
+    
+    // District to Division mapping
+    const districtToDivision = {
+      'रायपुर': 'रायपुर संभाग',
+      'गरियाबंद': 'रायपुर संभाग',
+      'बलौदाबाजार': 'रायपुर संभाग',
+      'महासमुंद': 'रायपुर संभाग',
+      'धमतरी': 'रायपुर संभाग',
+      'दुर्ग': 'दुर्ग संभाग',
+      'बालोद': 'दुर्ग संभाग',
+      'बेमेतरा': 'दुर्ग संभाग',
+      'कबीरधाम': 'दुर्ग संभाग',
+      'राजनांदगांव': 'दुर्ग संभाग',
+      'खैरागढ़': 'दुर्ग संभाग',
+      'मोहला': 'दुर्ग संभाग',
+      'बिलासपुर': 'बिलासपुर संभाग',
+      'मुंगेली': 'बिलासपुर संभाग',
+      'कोरबा': 'बिलासपुर संभाग',
+      'रायगढ़': 'बिलासपुर संभाग',
+      'जांजगीर': 'बिलासपुर संभाग',
+      'सक्ती': 'बिलासपुर संभाग',
+      'सारंगढ़-बिलाईगढ़': 'बिलासपुर संभाग',
+      'सरगुजा': 'सरगुजा संभाग',
+      'सूरजपुर': 'सरगुजा संभाग',
+      'बलरामपुर': 'सरगुजा संभाग',
+      'कोरिया': 'सरगुजा संभाग',
+      'मनेन्द्रगढ़-चिरमिरी': 'सरगुजा संभाग',
+      'जशपुर': 'सरगुजा संभाग',
+      'जगदलपुर': 'बस्तर संभाग',
+      'कोण्डागांव': 'बस्तर संभाग',
+      'कांकेर': 'बस्तर संभाग',
+      'दंतेवाड़ा': 'बस्तर संभाग',
+      'सुकमा': 'बस्तर संभाग',
+      'बीजापुर': 'बस्तर संभाग',
+      'नारायणपुर': 'बस्तर संभाग'
+    };
+    
+    // Authentication function
+    async function authenticateUser(username, password) {
+      try {
+        // For development/demo purposes, check against hardcoded passwords
+        // In production, this should be replaced with proper Supabase authentication
+        if (userPasswords[username] && userPasswords[username] === password) {
+          // Create a user object with role information
+          const user = {
+            username: username,
+            role: userRoles[username],
+            fullName: userFullNames[username]
+          };
+          
+          // For district and division officers, get their respective district/division
+          if (user.role === 'district_officer') {
+            // Extract district name from full name
+            const districtName = user.fullName.split(' - ')[1];
+            user.district = districtName;
+            user.division = districtToDivision[districtName];
+          } else if (user.role === 'division_officer') {
+            // Extract division name from full name
+            const divisionName = user.fullName.split(' - ')[1];
+            user.division = divisionName;
+          }
+          
+          return { success: true, user: user };
+        }
+        
+        // If we reach here, authentication failed
+        return { success: false, message: 'अमान्य उपयोगकर्ता नाम या पासवर्ड' };
+        
+        /* Uncomment this when Supabase authentication is set up
+        // Try to authenticate via Supabase
+        const { data, error } = await supabase.rpc('verify_password', {
+          username: username,
+          password_attempt: password
+        });
+        
+        if (error) {
+          console.error('Error during authentication:', error);
+          return { success: false, message: 'Authentication error' };
+        }
+        
+        if (data === true) {
+          // Get user details
+          const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('username', username)
+            .single();
+          
+          if (userError) {
+            console.error('Error fetching user data:', userError);
+            return { success: false, message: 'Error fetching user data' };
+          }
+          
+          return { success: true, user: userData };
+        } else {
+          return { success: false, message: 'Invalid username or password' };
+        }
+        */
+      } catch (error) {
+        console.error('Unexpected error during authentication:', error);
+        return { success: false, message: 'An unexpected error occurred' };
+      }
+    }
+    
     document.addEventListener('DOMContentLoaded', function() {
       // Force dropdown to open downward
       document.getElementById('userType').addEventListener('click', function() {
@@ -410,21 +672,69 @@
       });
       
       // Handle form submission
-      document.getElementById('loginForm').addEventListener('submit', function(e) {
+      document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const userType = document.getElementById('userType').value;
         const password = document.getElementById('password').value;
         
-        // For demonstration purposes - replace with actual authentication
-        if (userType && password === 'password') {
-          window.location.href = 'dashboard.html';
+        if (!userType) {
+          const errorDiv = document.getElementById('loginError');
+          errorDiv.textContent = 'कृपया उपयोगकर्ता प्रकार चुनें।';
+          errorDiv.classList.remove('d-none');
+          return;
+        }
+        
+        // Show loading state
+        const submitBtn = document.querySelector('.btn-login');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> लॉगिन हो रहा है...';
+        
+        const result = await authenticateUser(userType, password);
+        
+        // Restore button state
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        
+        if (result.success) {
+          // Store user info in session storage
+          sessionStorage.setItem('currentUser', JSON.stringify(result.user));
+          
+          // Show success message briefly
+          const errorDiv = document.getElementById('loginError');
+          errorDiv.textContent = 'लॉगिन सफल! अब आपको डैशबोर्ड पर निर्देशित किया जा रहा है...';
+          errorDiv.classList.remove('d-none', 'alert-danger');
+          errorDiv.classList.add('alert-success');
+          
+          // Remember user if checkbox is checked
+          if (document.getElementById('rememberMe').checked) {
+            localStorage.setItem('rememberedUser', userType);
+          } else {
+            localStorage.removeItem('rememberedUser');
+          }
+          
+          // Redirect to dashboard after a brief delay
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1000);
         } else {
           const errorDiv = document.getElementById('loginError');
-          errorDiv.textContent = 'कृपया वैध उपयोगकर्ता प्रकार और पासवर्ड दर्ज करें।';
-          errorDiv.classList.remove('d-none');
+          errorDiv.textContent = result.message || 'अमान्य उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।';
+          errorDiv.classList.remove('d-none', 'alert-success');
+          errorDiv.classList.add('alert-danger');
+          
+          // Focus on password field
+          document.getElementById('password').focus();
         }
       });
+      
+      // Check for remembered user
+      const rememberedUser = localStorage.getItem('rememberedUser');
+      if (rememberedUser) {
+        document.getElementById('userType').value = rememberedUser;
+        document.getElementById('rememberMe').checked = true;
+      }
     });
   </script>
 </body>
