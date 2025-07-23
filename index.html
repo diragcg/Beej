@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -9,83 +8,250 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
-  <!-- Noto Sans Devanagari font for Hindi -->
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts - Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google Fonts - Noto Sans Devanagari for Hindi -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
-    body {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      background-color: #f8f9fa;
+    :root {
+      --primary-color: #2e5aa7;
+      --secondary-color: #f8f9fa;
+      --accent-color: #28a745;
+      --shadow-color: rgba(46, 90, 167, 0.3);
     }
     
-    .login-container {
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    body {
+      font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    .login-wrapper {
+      width: 100%;
+      max-width: 450px;
+    }
+    
+    .login-card {
       background-color: white;
+      border-radius: 15px;
+      box-shadow: 
+        0 15px 25px var(--shadow-color),
+        0 5px 10px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      padding: 40px;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: all 0.3s ease;
+    }
+    
+    .login-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 20px 30px var(--shadow-color),
+        0 10px 15px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
     }
     
     .login-logo {
       text-align: center;
       margin-bottom: 30px;
+      transform: translateZ(20px);
     }
     
     .login-logo img {
-      max-width: 100px;
+      width: 90px;
       margin-bottom: 15px;
+      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
+    }
+    
+    .login-logo h2 {
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+    
+    .login-logo p {
+      color: #6c757d;
+      font-size: 14px;
+    }
+    
+    .form-floating {
+      margin-bottom: 20px;
+    }
+    
+    .form-floating label {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-weight: 500;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem var(--shadow-color);
+    }
+    
+    .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem var(--shadow-color);
     }
     
     .btn-login {
-      background-color: #28a745;
-      border-color: #28a745;
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      font-weight: 600;
+      padding: 12px;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
     
     .btn-login:hover {
-      background-color: #218838;
-      border-color: #1e7e34;
+      background-color: #1e4184;
+      border-color: #1e4184;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px var(--shadow-color);
+    }
+    
+    .btn-login:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+    
+    .form-check-input:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .forgot-password {
+      font-size: 14px;
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .forgot-password:hover {
+      color: #1e4184;
+      text-decoration: underline;
+    }
+    
+    .login-footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 13px;
+      color: #6c757d;
+    }
+    
+    .user-type-selector {
+      margin-bottom: 25px;
+    }
+    
+    .alert-login {
+      margin-bottom: 20px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    
+    /* 3D Effect for inputs */
+    .form-control, .form-select {
+      border: 2px solid #e9ecef;
+      border-radius: 10px;
+      padding: 12px;
+      height: auto;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      transform: translateY(-2px);
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="login-container">
+  <div class="login-wrapper">
+    <div class="login-card">
       <div class="login-logo">
         <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Emblem_of_Chhattisgarh.svg" alt="Chhattisgarh Emblem">
         <h2>बीज परीक्षण पोर्टल</h2>
-        <p class="text-muted">कृषि विभाग, छत्तीसगढ़ शासन</p>
+        <p>कृषि विभाग, छत्तीसगढ़ शासन</p>
       </div>
       
-      <div id="loginError" class="alert alert-danger d-none"></div>
+      <div id="loginError" class="alert alert-danger alert-login d-none"></div>
       
       <form id="loginForm">
-        <div class="mb-3">
-          <label for="username" class="form-label">उपयोगकर्ता नाम</label>
-          <input type="text" class="form-control" id="username" placeholder="उपयोगकर्ता नाम दर्ज करें" required>
+        <div class="user-type-selector">
+          <label for="userType" class="form-label">उपयोगकर्ता प्रकार</label>
+          <select class="form-select" id="userType">
+            <option value="">-- उपयोगकर्ता प्रकार चुनें --</option>
+            <optgroup label="राज्य स्तर">
+              <option value="deputy_director_state">उप संचालक कृषि - राज्य स्तर</option>
+            </optgroup>
+            <optgroup label="बीज प्रमाणीकरण संस्था">
+              <option value="seed_certification_raipur">बीज प्रमाणीकरण संस्था, रायपुर</option>
+            </optgroup>
+            <optgroup label="संभाग स्तर">
+              <option value="joint_director_रायपुर_संभाग">संयुक्त संचालक कृषि - रायपुर संभाग</option>
+              <option value="joint_director_दुर्ग_संभाग">संयुक्त संचालक कृषि - दुर्ग संभाग</option>
+              <option value="joint_director_बिलासपुर_संभाग">संयुक्त संचालक कृषि - बिलासपुर संभाग</option>
+              <option value="joint_director_सरगुजा_संभाग">संयुक्त संचालक कृषि - सरगुजा संभाग</option>
+              <option value="joint_director_बस्तर_संभाग">संयुक्त संचालक कृषि - बस्तर संभाग</option>
+            </optgroup>
+            <optgroup label="जिला स्तर - रायपुर संभाग">
+              <option value="deputy_director_रायपुर">उप संचालक कृषि - रायपुर</option>
+              <option value="deputy_director_गरियाबंद">उप संचालक कृषि - गरियाबंद</option>
+              <option value="deputy_director_बलौदाबाजार">उप संचालक कृषि - बलौदाबाजार</option>
+              <option value="deputy_director_महासमुंद">उप संचालक कृषि - महासमुंद</option>
+              <option value="deputy_director_धमतरी">उप संचालक कृषि - धमतरी</option>
+            </optgroup>
+            <optgroup label="जिला स्तर - दुर्ग संभाग">
+              <option value="deputy_director_दुर्ग">उप संचालक कृषि - दुर्ग</option>
+              <option value="deputy_director_बालोद">उप संचालक कृषि - बालोद</option>
+              <option value="deputy_director_बेमेतरा">उप संचालक कृषि - बेमेतरा</option>
+              <option value="deputy_director_कबीरधाम">उप संचालक कृषि - कबीरधाम</option>
+              <option value="deputy_director_राजनांदगांव">उप संचालक कृषि - राजनांदगांव</option>
+            </optgroup>
+            <optgroup label="जिला स्तर - बिलासपुर संभाग">
+              <option value="deputy_director_बिलासपुर">उप संचालक कृषि - बिलासपुर</option>
+              <option value="deputy_director_मुंगेली">उप संचालक कृषि - मुंगेली</option>
+              <option value="deputy_director_कोरबा">उप संचालक कृषि - कोरबा</option>
+              <option value="deputy_director_रायगढ़">उप संचालक कृषि - रायगढ़</option>
+            </optgroup>
+          </select>
         </div>
         
-        <div class="mb-3">
-          <label for="password" class="form-label">पासवर्ड</label>
+        <div class="form-floating mb-3">
           <input type="password" class="form-control" id="password" placeholder="पासवर्ड दर्ज करें" required>
+          <label for="password">पासवर्ड</label>
         </div>
         
-        <div class="mb-3 form-check">
-          <input type="checkbox" class="form-check-input" id="rememberMe">
-          <label class="form-check-label" for="rememberMe">मुझे याद रखें</label>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="rememberMe">
+            <label class="form-check-label" for="rememberMe">मुझे याद रखें</label>
+          </div>
+          <a href="#" class="forgot-password">पासवर्ड भूल गए?</a>
         </div>
         
-        <button type="submit" class="btn btn-primary btn-login w-100">लॉगिन</button>
+        <button type="submit" class="btn btn-primary btn-login w-100">
+          <i class="bi bi-box-arrow-in-right me-2"></i>लॉगिन
+        </button>
       </form>
       
-      <div class="mt-3 text-center">
-        <a href="#" class="text-decoration-none">पासवर्ड भूल गए?</a>
+      <div class="login-footer">
+        <p>&copy; 2023 कृषि विभाग, छत्तीसगढ़ शासन। सर्वाधिकार सुरक्षित।</p>
+        <p>तकनीकी सहायता: <a href="mailto:support@agriculture.cg.gov.in">support@agriculture.cg.gov.in</a></p>
       </div>
     </div>
-    
-    <footer class="text-center mt-5">
-      <p class="text-muted">&copy; 2023 कृषि विभाग, छत्तीसगढ़ शासन। सर्वाधिकार सुरक्षित।</p>
-    </footer>
   </div>
 
   <!-- Bootstrap JS -->
@@ -95,15 +261,15 @@
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      const username = document.getElementById('username').value;
+      const userType = document.getElementById('userType').value;
       const password = document.getElementById('password').value;
       
       // For demonstration purposes - replace with actual authentication
-      if (username === 'admin' && password === 'password') {
+      if (userType && password === 'password') {
         window.location.href = 'dashboard.html';
       } else {
         const errorDiv = document.getElementById('loginError');
-        errorDiv.textContent = 'अमान्य उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।';
+        errorDiv.textContent = 'कृपया वैध उपयोगकर्ता प्रकार और पासवर्ड दर्ज करें।';
         errorDiv.classList.remove('d-none');
       }
     });
