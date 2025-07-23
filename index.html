@@ -38,7 +38,7 @@
     
     .login-wrapper {
       width: 100%;
-      max-width: 450px;
+      max-width: 500px;
     }
     
     .login-card {
@@ -77,12 +77,15 @@
     .login-logo h2 {
       font-weight: 700;
       color: var(--primary-color);
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      font-size: 24px; /* Increased font size */
+      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .login-logo p {
       color: #6c757d;
-      font-size: 14px;
+      font-size: 16px; /* Increased font size */
+      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .form-floating {
@@ -92,6 +95,7 @@
     .form-floating label {
       font-family: 'Noto Sans Devanagari', sans-serif;
       font-weight: 500;
+      font-size: 16px; /* Increased font size */
     }
     
     .form-control:focus {
@@ -109,11 +113,12 @@
       border-color: var(--primary-color);
       font-weight: 600;
       padding: 12px;
-      font-size: 16px;
+      font-size: 18px; /* Increased font size */
       margin-top: 10px;
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
+      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .btn-login:hover {
@@ -134,10 +139,11 @@
     }
     
     .forgot-password {
-      font-size: 14px;
+      font-size: 16px; /* Increased font size */
       color: var(--primary-color);
       text-decoration: none;
       transition: all 0.3s ease;
+      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .forgot-password:hover {
@@ -148,18 +154,28 @@
     .login-footer {
       margin-top: 30px;
       text-align: center;
-      font-size: 13px;
+      font-size: 14px; /* Increased font size */
       color: #6c757d;
+      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .user-type-selector {
       margin-bottom: 25px;
     }
     
+    .user-type-selector label {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-weight: 500;
+      font-size: 16px; /* Increased font size */
+      margin-bottom: 8px;
+    }
+    
     .alert-login {
       margin-bottom: 20px;
       border-radius: 10px;
       font-weight: 500;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-size: 16px; /* Increased font size */
     }
     
     /* 3D Effect for inputs */
@@ -168,12 +184,42 @@
       border-radius: 10px;
       padding: 12px;
       height: auto;
-      font-size: 15px;
+      font-size: 16px; /* Increased font size */
       transition: all 0.3s ease;
+      font-family: 'Noto Sans Devanagari', sans-serif;
     }
     
     .form-control:focus, .form-select:focus {
       transform: translateY(-2px);
+    }
+    
+    .form-check-label {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-size: 16px; /* Increased font size */
+    }
+    
+    .tech-support {
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .seed-icon {
+      display: inline-block;
+      position: relative;
+      width: 100px;
+      height: 100px;
+      background-color: #f8f9fa;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+    
+    .seed-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 15px;
     }
   </style>
 </head>
@@ -181,7 +227,10 @@
   <div class="login-wrapper">
     <div class="login-card">
       <div class="login-logo">
-        <h3>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल - लॉगिन</h3>
+        <div class="seed-icon">
+          <img src="https://img.freepik.com/free-vector/hand-drawn-seeds-collection_23-2147783584.jpg?w=826&t=st=1690594523~exp=1690595123~hmac=d8c6e5f6a96a4b0b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b" alt="Seed Icon">
+        </div>
+        <h2>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</h2>
         <p>कृषि विभाग, छत्तीसगढ़ शासन</p>
       </div>
       
