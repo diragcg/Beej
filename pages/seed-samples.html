@@ -131,24 +131,7 @@
               </tr>
             </thead>
             <tbody id="seedSampleTableBody">
-              <!-- Sample data will be loaded here -->
-              <tr>
-                <td>1</td>
-                <td>रायपुर</td>
-                <td>100</td>
-                <td>80</td>
-                <td>75</td>
-                <td>नोटिस जारी</td>
-                <td>15/07/2023</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                  <button class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                </td>
-              </tr>
+              
             </tbody>
           </table>
         </div>
@@ -164,74 +147,6 @@
   <script src="../js/auth.js"></script>
   <script src="../js/seedSamples.js"></script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Check if user is logged in
-      if (!Auth.currentUser) {
-        window.location.href = '../index.html';
-        return;
-      }
-      
-      // Initialize the form
-      const seedSampleForm = document.getElementById('seedSampleForm');
-      seedSampleForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form values
-        const district = document.getElementById('district').value;
-        const proposedTarget = document.getElementById('proposedTarget').value;
-        const totalSamplesTaken = document.getElementById('totalSamplesTaken').value;
-        const samplesSentToLab = document.getElementById('samplesSentToLab').value;
-        const actionTaken = document.getElementById('actionTaken').value;
-        const date = document.getElementById('date').value;
-        
-        // Create data object
-        const sampleData = {
-          district: district,
-          proposedTarget: proposedTarget,
-          totalSamplesTaken: totalSamplesTaken,
-          samplesSentToLab: samplesSentToLab,
-          actionTaken: actionTaken,
-          date: date
-        };
-        
-        // Log data
-        console.log('Sample Data:', sampleData);
-        
-        // Add row to table
-        const tableBody = document.getElementById('seedSampleTableBody');
-        const newRow = tableBody.insertRow();
-        
-        const cell1 = newRow.insertCell(0);
-        const cell2 = newRow.insertCell(1);
-        const cell3 = newRow.insertCell(2);
-        const cell4 = newRow.insertCell(3);
-        const cell5 = newRow.insertCell(4);
-        const cell6 = newRow.insertCell(5);
-        const cell7 = newRow.insertCell(6);
-        const cell8 = newRow.insertCell(7);
-        
-        cell1.textContent = tableBody.rows.length;
-        cell2.textContent = district;
-        cell3.textContent = proposedTarget;
-        cell4.textContent = totalSamplesTaken;
-        cell5.textContent = samplesSentToLab;
-        cell6.textContent = actionTaken;
-        cell7.textContent = date;
-        cell8.innerHTML = `
-          <button class="btn btn-sm btn-outline-primary">
-            <i class="bi bi-eye"></i>
-          </button>
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="bi bi-pencil"></i>
-          </button>
-        `;
-        
-        // Clear form
-        seedSampleForm.reset();
-      });
-    });
-  </script>
+  
 </body>
 </html>
-
