@@ -1,611 +1,161 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल - लॉगिन</title>
-  
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-  
-  <!-- Google Fonts - Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Google Fonts - Noto Sans Devanagari for Hindi -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <link href="css/style.css" rel="stylesheet">
-
-  <style>
-    :root {
-      --primary-color: #2e5aa7;
-      --secondary-color: #f8f9fa;
-      --accent-color: #28a745;
-      --shadow-color: rgba(46, 90, 167, 0.3);
-      --border-radius: 16px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>बीज - छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</title>
     
-    body {
-      font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      margin: 0;
-    }
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    .login-wrapper {
-      width: 100%;
-      max-width: 550px;
-    }
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
     
-    .login-card {
-      background-color: white;
-      border-radius: var(--border-radius);
-      box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.1),
-        0 10px 20px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-      padding: 40px;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
+    <!-- Google Fonts - For Hindi Support -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    .login-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, #2e5aa7, #4481eb, #04befe, #2e5aa7);
-      background-size: 300% 100%;
-      animation: gradient 5s ease infinite;
-    }
-    
-    @keyframes gradient {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-    
-    .login-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.12),
-        0 15px 30px rgba(0, 0, 0, 0.1),
-        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-    }
-    
-    .login-header {
-      text-align: center;
-      margin-bottom: 30px;
-      transform: translateZ(20px);
-      position: relative;
-    }
-    
-    .login-header h2 {
-      font-weight: 700;
-      color: var(--primary-color);
-      margin-bottom: 10px;
-      font-size: 26px;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .login-header p {
-      color: #6c757d;
-      font-size: 16px;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      margin-bottom: 0;
-    }
-    
-    .form-group {
-      margin-bottom: 25px;
-      position: relative;
-    }
-    
-    .form-group label {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      font-weight: 600;
-      font-size: 16px;
-      margin-bottom: 8px;
-      display: block;
-      color: #333;
-    }
-    
-    .form-control, .form-select {
-      height: auto;
-      padding: 14px;
-      font-size: 16px;
-      border: 2px solid #e9ecef;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      background-color: #f8f9fa;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) inset;
-    }
-    
-    .form-control:focus, .form-select:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(46, 90, 167, 0.1), 0 2px 5px rgba(0, 0, 0, 0.05) inset;
-      background-color: #fff;
-      outline: none;
-      transform: translateY(-2px);
-    }
-    
-    .form-select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      background-size: 16px 12px;
-      padding-right: 2.5rem;
-    }
-    
-    .btn-login {
-      background: linear-gradient(135deg, #2e5aa7 0%, #1e4184 100%);
-      border: none;
-      font-weight: 600;
-      padding: 14px;
-      font-size: 18px;
-      margin-top: 10px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(30, 65, 132, 0.3);
-      z-index: 1;
-    }
-    
-    .btn-login:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: all 0.6s;
-      z-index: -1;
-    }
-    
-    .btn-login:hover:before {
-      left: 100%;
-    }
-    
-    .btn-login:hover {
-      background: linear-gradient(135deg, #1e4184 0%, #0d2b5e 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba(30, 65, 132, 0.4);
-    }
-    
-    .btn-login:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 5px rgba(30, 65, 132, 0.4);
-    }
-    
-    .form-check-input:checked {
-      background-color: var(--primary-color);
-      border-color: var(--primary-color);
-    }
-    
-    .forgot-password {
-      font-size: 16px;
-      color: var(--primary-color);
-      text-decoration: none;
-      transition: all 0.3s ease;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      font-weight: 500;
-    }
-    
-    .forgot-password:hover {
-      color: #1e4184;
-      text-decoration: underline;
-    }
-    
-    .login-footer {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 14px;
-      color: #6c757d;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      border-top: 1px solid #e9ecef;
-      padding-top: 20px;
-    }
-    
-    .tech-support {
-      font-weight: 600;
-      color: #333;
-      background-color: #f8f9fa;
-      padding: 4px 10px;
-      border-radius: 20px;
-      display: inline-block;
-      margin-top: 5px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-    
-    .alert-login {
-      margin-bottom: 20px;
-      border-radius: 12px;
-      font-weight: 500;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      font-size: 16px;
-      padding: 15px;
-      border-left: 4px solid #dc3545;
-    }
-    
-    .alert-login.alert-success {
-      border-left-color: #28a745;
-    }
-    
-    /* Custom dropdown styling */
-    .dropdown-menu {
-      transform: translateY(10px) !important;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      padding: 15px 0;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    
-    .dropdown-menu::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    .dropdown-menu::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-    
-    .dropdown-menu::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 10px;
-    }
-    
-    .dropdown-menu::-webkit-scrollbar-thumb:hover {
-      background: #a8a8a8;
-    }
-    
-    .dropdown-item {
-      padding: 10px 20px;
-      font-family: 'Noto Sans Devanagari', sans-serif;
-    }
-    
-    .dropdown-item:hover {
-      background-color: #f8f9fa;
-    }
-    
-    optgroup {
-      font-weight: 600;
-      color: var(--primary-color);
-      font-family: 'Noto Sans Devanagari', sans-serif;
-    }
-    
-    option {
-      font-weight: normal;
-      color: #333;
-      padding: 10px;
-    }
-    
-    .form-check-label {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-      font-size: 16px;
-    }
-    
-    @media (max-width: 576px) {
-      .login-card {
-        padding: 30px 20px;
-      }
-      
-      .login-header h2 {
-        font-size: 22px;
-      }
-    }
-    
-    .spinner-border-sm {
-      margin-right: 8px;
-    }
-    
-    /* Loading overlay */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      z-index: 9999;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-    
-    .loading-overlay.show {
-      opacity: 1;
-      visibility: visible;
-    }
-    
-    .loading-spinner {
-      width: 60px;
-      height: 60px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid var(--primary-color);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
-    
-    .loading-text {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--primary-color);
-      font-family: 'Noto Sans Devanagari', sans-serif;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, #138808, #000080);
+            padding: 1.5rem;
+            text-align: center;
+            color: white;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .login-card {
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">लॉगिन हो रहा है...</div>
-  </div>
-
-  <div class="login-wrapper">
-    <div class="login-card">
-      <div class="login-header">
-        <h2>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</h2>
-        <p>कृषि विभाग, छत्तीसगढ़ शासन</p>
-      </div>
-      
-      <div id="loginError" class="alert alert-danger alert-login d-none"></div>
-      
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="userType">उपयोगकर्ता प्रकार</label>
-          <select class="form-select" id="userType" required>
-            <option value="">-- उपयोगकर्ता प्रकार चुनें --</option>
-          </select>
+    <div class="login-container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="login-card card w-100">
+            <div class="login-header">
+                <h2>बीज (Beej)</h2>
+                <p class="mb-0">छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</p>
+                <small>कृषि विभाग, छत्तीसगढ़ शासन</small>
+            </div>
+            
+            <div class="card-body p-4">
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">उपयोगकर्ता नाम</label>
+                        <input type="text" class="form-control" id="username" placeholder="उपयोगकर्ता नाम दर्ज करें" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">पासवर्ड</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" placeholder="पासवर्ड दर्ज करें" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe">मुझे याद रखें</label>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">लॉगिन करें</button>
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p class="text-muted small">© 2023 कृषि विभाग, छत्तीसगढ़ शासन</p>
+                </div>
+            </div>
         </div>
-        
-        <div class="form-group">
-          <label for="password">पासवर्ड</label>
-          <input type="password" class="form-control" id="password" placeholder="पासवर्ड दर्ज करें" required>
-        </div>
-        
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="rememberMe">
-            <label class="form-check-label" for="rememberMe">मुझे याद रखें</label>
-          </div>
-          <a href="#" class="forgot-password">पासवर्ड भूल गए?</a>
-        </div>
-        
-        <button type="submit" class="btn btn-primary btn-login w-100">
-          <i class="bi bi-box-arrow-in-right me-2"></i>लॉगिन
-        </button>
-      </form>
-      
-      <div class="login-footer">
-        <p>&copy; 2023 कृषि विभाग, छत्तीसगढ़ शासन। सर्वाधिकार सुरक्षित।</p>
-        <p>तकनीकी सहायता: <span class="tech-support">शैलेंद्र सिंह चौहान - 9399207068</span></p>
-      </div>
     </div>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- App JS -->
-  <script src="js/config.js"></script>
-  <script src="js/auth.js"></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-      // Load user options
-      await loadUserOptions();
-
-      // Check for remembered user
-      const rememberedUser = localStorage.getItem('rememberedUser');
-      if (rememberedUser) {
-        document.getElementById('userType').value = rememberedUser;
-        document.getElementById('rememberMe').checked = true;
-        document.getElementById('password').focus();
-      }
-
-      // Handle form submission
-      document.getElementById('loginForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const userType = document.getElementById('userType').value;
-        const password = document.getElementById('password').value;
-
-        // Basic validation
-        if (!userType) {
-          showError('कृपया उपयोगकर्ता प्रकार चुनें।');
-          return;
-        }
-
-        // Show loading overlay
-        showLoading(true);
-
-        // Simulate network delay for demo purposes
-        setTimeout(function() {
-          // Check credentials
-          authenticateUser(userType, password);
-        }, 1500); // Simulate a 1.5 second delay
-      });
-    });
-
-    // Function to load user options from the app_users table
-    async function loadUserOptions() {
-      const { data: users, error } = await AppConfig.supabase
-        .from('app_users')
-        .select('username, full_name');
-
-      if (error) {
-        console.error('Error loading users:', error);
-        showError('उपयोगकर्ताओं को लोड करने में त्रुटि हुई।');
-        return;
-      }
-
-      const userSelect = document.getElementById('userType');
-      userSelect.innerHTML = '<option value="">-- उपयोगकर्ता प्रकार चुनें --</option>';
-
-      // Create a map to group users by role
-      const groupedUsers = {};
-      users.forEach(user => {
-        if (!groupedUsers[user.user_role]) {
-          groupedUsers[user.user_role] = [];
-        }
-        groupedUsers[user.user_role].push(user);
-      });
-
-      // Add optgroups and options to the select element
-      for (const role in groupedUsers) {
-        if (groupedUsers.hasOwnProperty(role)) {
-          const optgroup = document.createElement('optgroup');
-          optgroup.label = getRoleDisplayName(role); // Function to get display name for role
-          userSelect.appendChild(optgroup);
-
-          groupedUsers[role].forEach(user => {
-            const option = document.createElement('option');
-            option.value = user.username;
-            option.textContent = user.full_name;
-            optgroup.appendChild(option);
-          });
-        }
-      }
-    }
-
-    // Show error message
-    function showError(message) {
-      const errorDiv = document.getElementById('loginError');
-      errorDiv.textContent = message;
-      errorDiv.classList.remove('d-none', 'alert-success');
-      errorDiv.classList.add('alert-danger');
-    }
     
-    // Show success message
-    function showSuccess(message) {
-      const errorDiv = document.getElementById('loginError');
-      errorDiv.textContent = message;
-      errorDiv.classList.remove('d-none', 'alert-danger');
-      errorDiv.classList.add('alert-success');
-    }
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
-    // Show/hide loading overlay
-    function showLoading(show) {
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      if (show) {
-        loadingOverlay.classList.add('show');
-      } else {
-        loadingOverlay.classList.remove('show');
-      }
-    }
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
-    // Handle successful login
-    function loginSuccess(user) {
-        // Store user in session storage
-        sessionStorage.setItem('currentUser', JSON.stringify(user));
-
-        // Remember user if checkbox is checked
-        if (document.getElementById('rememberMe').checked) {
-          localStorage.setItem('rememberedUser', user.username);
-        } else {
-          localStorage.removeItem('rememberedUser');
-        }
-
-        // Show success message
-        showSuccess('लॉगिन सफल! अब आपको डैशबोर्ड पर निर्देशित किया जा रहा है...');
-
-        // Redirect to dashboard after a brief delay
-        setTimeout(function() {
-          window.location.href = 'dashboard.html';
-        }, 1000);
-      }
-    
-    // Handle failed login
-    function loginFailed(message) {
-      // Hide loading overlay
-      showLoading(false);
-      
-      // Show error message
-      showError(message || 'अमान्य उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।');
-      
-      // Focus on password field
-      document.getElementById('password').focus();
-      document.getElementById('password').select();
-    }
-
-    // Function to get display name for the role
-    function getRoleDisplayName(role) {
-      const roleDisplayNames = {
-        'state_admin': 'राज्य स्तर',
-        'seed_certification_agency': 'बीज प्रमाणीकरण संस्था',
-        'division_officer': 'संभाग स्तर',
-        'district_officer': 'जिला स्तर'
-      };
-      return roleDisplayNames[role] || role;
-    }
-
-    // Authenticate user
-    async function authenticateUser(username, password) {
-      // For demo purposes, check against hardcoded passwords
-      // In production, this should be replaced with proper Supabase authentication
-      if (userCredentials[username] === password) {
-        // Create user object
-        const user = {
-          username: username,
-          role: userRoles[username],
-          fullName: userFullNames[username]
-        };
-
-        // Add district/division info if applicable
-        if (user.role === 'district_officer') {
-          const districtName = user.fullName.split(' - ')[1];
-          user.district = districtName;
-          user.division = districtToDivision[districtName];
-        } else if (user.role === 'division_officer') {
-          const divisionName = user.fullName.split(' - ')[1];
-          user.division = divisionName;
-        }
-        
-        loginSuccess(user);
-        // Hide loading overlay
-        showLoading(false);
-        // Show success message
-        showSuccess('लॉगिन सफल! अब आपको डैशबोर्ड पर निर्देशित किया जा रहा है...');
-      } else {
-        loginFailed('अमान्य उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।');
-      }
-    }
-  </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Supabase client
+            const supabaseUrl = 'https://evgmvktquwufhdevtahx.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z212a3RxdXd1ZmhkZXZ0YWh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNjU0NTEsImV4cCI6MjA2ODg0MTQ1MX0.-JTBxxMms1U3H1nIzEQN54FEHKeHMP8HbUf7s3nIfIk';
+            const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+            
+            // Toggle password visibility
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                }
+            });
+            
+            // Form submission
+            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                try {
+                    // Query the users table for the provided username and password
+                    const { data, error } = await supabase
+                        .from('users')
+                        .select('*')
+                        .eq('username', username)
+                        .eq('password', password)
+                        .single();
+                    
+                    if (error) throw error;
+                    
+                    if (data) {
+                        // Successful login
+                        localStorage.setItem('user', JSON.stringify(data));
+                        
+                        // Redirect based on user role
+                        switch (data.user_role) {
+                            case 'admin':
+                                window.location.href = 'admin-dashboard.html';
+                                break;
+                            case 'inspector':
+                                window.location.href = 'inspector-dashboard.html';
+                                break;
+                            default:
+                                window.location.href = 'dashboard.html';
+                        }
+                    } else {
+                        alert('अमान्य उपयोगकर्ता नाम या पासवर्ड');
+                    }
+                } catch (error) {
+                    console.error('Login error:', error);
+                    alert('लॉगिन में त्रुटि हुई');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
