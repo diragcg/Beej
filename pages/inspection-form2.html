@@ -1,1 +1,129 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>निरीक्षण प्रतिवेदन प्रपत्र 2 - छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts - Poppins -->
+  <link href="../css/style.css" rel="stylesheet">
+  
+  <style>
+    /* Add any page-specific styles here */
+    .form-label {
+      font-weight: 600;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(46, 90, 167, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h1 class="mb-4">निरीक्षण प्रतिवेदन प्रपत्र 2</h1>
+    
+    <!-- Data Entry Form -->
+    <div class="card mb-4">
+      <div class="card-header">नया निरीक्षण प्रतिवेदन प्रपत्र 2 जोड़ें</div>
+      <div class="card-body">
+        <form id="inspectionReportForm2">
+          <div class="mb-3">
+            <label for="district" class="form-label">जिला</label>
+            <input type="text" class="form-control" id="district" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="samplesTaken" class="form-label">लिये गये नमूने</label>
+            <input type="number" class="form-control" id="samplesTaken" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="nonStandardSamplesCount" class="form-label">परीक्षण उपरांत अमानक पाये गये नमूनों की संख्या</label>
+            <input type="number" class="form-control" id="nonStandardSamplesCount" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="seedName" class="form-label">बीज का नाम (ग्रेड सहित)</label>
+            <input type="text" class="form-control" id="seedName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="companyName" class="form-label">कंपनी का नाम जिसका नमूना अमानक पाया गया</label>
+            <input type="text" class="form-control" id="companyName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="quantity" class="form-label">मात्रा (क्वि. में)</label>
+            <input type="number" class="form-control" id="quantity" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="actionTaken" class="form-label">कार्यवाही</label>
+            <input type="text" class="form-control" id="actionTaken">
+          </div>
+          
+          <div class="mb-3">
+            <label for="date" class="form-label">दिनांक</label>
+            <input type="date" class="form-control" id="date" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="remark" class="form-label">रिमार्क</label>
+            <textarea class="form-control" id="remark" rows="3"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>जोड़ें
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Data Table -->
+    <div class="card">
+      <div class="card-header">निरीक्षण प्रतिवेदन प्रपत्र 2</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>क्र.</th>
+                <th>जिला</th>
+                <th>लिये गये नमूने</th>
+                <th>अमानक नमूने</th>
+                <th>बीज का नाम</th>
+                <th>कंपनी का नाम</th>
+                <th>मात्रा (क्वि. में)</th>
+                <th>कार्यवाही</th>
+                <th>दिनांक</th>
+                <th>कार्य</th>
+              </tr>
+            </thead>
+            <tbody id="inspectionReportForm2TableBody">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- App JS -->
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/inspectionReportForm2.js"></script>
+  
+</body>
+</html>
 
