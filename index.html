@@ -1,818 +1,1041 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>बीज - छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</title>
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
-    
-    <!-- Google Fonts - Poppins and Noto Sans Devanagari -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Three.js for 3D effects -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
-    <!-- PDF.js for PDF generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
-    <style>
-        :root {
-            --primary-color: #0a4275; /* Dark Blue */
-            --secondary-color: #1e88e5; /* Light Blue */
-            --accent-color: #64b5f6; /* Lighter Blue */
-            --light-color: #f5f9ff;
-            --dark-color: #002447;
-            --text-color: #333;
-            --white-color: #ffffff;
-        }
-        
-        body {
-            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
-            background-color: var(--light-color);
-            color: var(--text-color);
-            min-height: 100vh;
-        }
-        
-        .hindi-text {
-            font-family: 'Noto Sans Devanagari', sans-serif;
-            font-weight: 500;
-        }
-        
-        .bold-text {
-            font-weight: 700;
-        }
-        
-        .auth-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        
-        .auth-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 36, 71, 0.1);
-            overflow: hidden;
-            background: var(--white-color);
-        }
-        
-        .auth-header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            padding: 2rem;
-            text-align: center;
-            color: var(--white-color);
-        }
-        
-        .auth-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .auth-subtitle {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-bottom: 0.5rem;
-        }
-        
-        .auth-tabs .nav-link {
-            color: var(--text-color);
-            font-weight: 600;
-            padding: 1rem;
-            border: none;
-        }
-        
-        .auth-tabs .nav-link.active {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--primary-color);
-            background-color: transparent;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--dark-color);
-        }
-        
-        .form-control {
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            border: 2px solid #e0e0e0;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 0.25rem rgba(30, 136, 229, 0.25);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover, .btn-primary:focus {
-            background-color: var(--dark-color);
-            border-color: var(--dark-color);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 36, 71, 0.2);
-        }
-        
-        .card-3d {
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.5s ease;
-            transform-style: preserve-3d;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: var(--white-color);
-            position: relative;
-            height: 120px;
-        }
-        
-        .card-3d:hover {
-            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
-            box-shadow: 0 15px 30px rgba(0, 36, 71, 0.3);
-        }
-        
-        .card-3d-content {
-            padding: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .card-3d-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .card-3d-text {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-        
-        #canvas-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-        
-        .footer {
-            background-color: var(--primary-color);
-            color: var(--white-color);
-            padding: 1rem 0;
-            text-align: center;
-        }
-        
-        .password-strength {
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-        }
-        
-        .success-checkmark {
-            font-size: 5rem;
-            color: #4CAF50;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-    </style>
-</head>
-<body>
-    <div class="auth-container d-flex align-items-center justify-content-center min-vh-100">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="auth-card card">
-                        <div class="auth-header">
-                            <h1 class="auth-title hindi-text bold-text">बीज (Beej)</h1>
-                            <p class="auth-subtitle hindi-text">छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</p>
-                            <p class="hindi-text mb-0">कृषि विभाग, छत्तीसगढ़ शासन</p>
-                        </div>
-                        
-                        <div class="card-body p-4">
-                            <!-- Auth Tabs -->
-                            <ul class="nav nav-tabs auth-tabs mb-4" id="authTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link hindi-text" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-pane" type="button" role="tab" aria-controls="login-pane" aria-selected="false">लॉगिन</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active hindi-text" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-pane" type="button" role="tab" aria-controls="register-pane" aria-selected="true">पंजीकरण</button>
-                                </li>
-                            </ul>
-                            
-                            <!-- Tab Content -->
-                            <div class="tab-content" id="authTabsContent">
-                                <!-- Login Form -->
-                                <div class="tab-pane fade" id="login-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
-                                    <div class="row mb-4">
-                                        <div class="col-md-4 mb-3">
-                                            <div class="card-3d">
-                                                <div id="canvas-container-1" class="canvas-3d"></div>
-                                                <div class="card-3d-content">
-                                                    <h3 class="card-3d-title hindi-text">सुरक्षित लॉगिन</h3>
-                                                    <p class="card-3d-text hindi-text">उपयोगकर्ता प्रमाणीकरण</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <div class="card-3d">
-                                                <div id="canvas-container-2" class="canvas-3d"></div>
-                                                <div class="card-3d-content">
-                                                    <h3 class="card-3d-title hindi-text">डैशबोर्ड एक्सेस</h3>
-                                                    <p class="card-3d-text hindi-text">अपने कार्यों का प्रबंधन करें</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-3">
-                                            <div class="card-3d">
-                                                <div id="canvas-container-3" class="canvas-3d"></div>
-                                                <div class="card-3d-content">
-                                                    <h3 class="card-3d-title hindi-text">रिपोर्ट देखें</h3>
-                                                    <p class="card-3d-text hindi-text">विस्तृत विश्लेषण</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <form id="loginForm">
-                                        <div class="mb-3">
-                                            <label for="loginUsername" class="form-label hindi-text">उपयोगकर्ता नाम</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                                                <input type="text" class="form-control" id="loginUsername" placeholder="अपना उपयोगकर्ता नाम दर्ज करें" required>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="loginPassword" class="form-label hindi-text">पासवर्ड</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                                <input type="password" class="form-control" id="loginPassword" placeholder="अपना पासवर्ड दर्ज करें" required>
-                                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                                                    <i class="bi bi-eye"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="mb-4 form-check">
-                                            <input type="checkbox" class="form-check-input" id="rememberMe">
-                                            <label class="form-check-label hindi-text" for="rememberMe">मुझे याद रखें</label>
-                                            <a href="#" class="float-end hindi-text">पासवर्ड भूल गए?</a>
-                                        </div>
-                                        
-                                        <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-primary btn-lg hindi-text">लॉगिन करें</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                
-                                <!-- Register Form -->
-                                <div class="tab-pane fade show active" id="register-pane" role="tabpanel" aria-labelledby="register-tab" tabindex="0">
-                                    <div id="registrationForm">
-                                        <form id="userRegistrationForm">
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="fullName" class="form-label hindi-text">पूरा नाम</label>
-                                                    <input type="text" class="form-control" id="fullName" placeholder="अपना पूरा नाम दर्ज करें" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="mobileNumber" class="form-label hindi-text">मोबाइल नंबर</label>
-                                                    <input type="tel" class="form-control" id="mobileNumber" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" pattern="[0-9]{10}" required>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="userType" class="form-label hindi-text">उपयोगकर्ता प्रकार</label>
-                                                    <select class="form-select" id="userType" required>
-                                                        <option value="" selected disabled>उपयोगकर्ता प्रकार चुनें</option>
-                                                        <option value="state">राज्य उपयोगकर्ता</option>
-                                                        <option value="lab">बीज गुण नियंत्रण प्रयोगशाला</option>
-                                                        <option value="division">मंडल उपयोगकर्ता</option>
-                                                        <option value="district">जिला उपयोगकर्ता</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="userRole" class="form-label hindi-text">उपयोगकर्ता भूमिका</label>
-                                                    <select class="form-select" id="userRole" required disabled>
-                                                        <option value="" selected disabled>पहले उपयोगकर्ता प्रकार चुनें</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="division" class="form-label hindi-text">मंडल</label>
-                                                    <select class="form-select" id="division" disabled>
-                                                        <option value="" selected disabled>मंडल चुनें</option>
-                                                        <!-- Will be populated from database -->
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="district" class="form-label hindi-text">जिला</label>
-                                                    <select class="form-select" id="district" disabled>
-                                                        <option value="" selected disabled>पहले मंडल चुनें</option>
-                                                        <!-- Will be populated from database based on division -->
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="mb-4 form-check">
-                                                <input type="checkbox" class="form-check-input" id="termsAgree" required>
-                                                <label class="form-check-label hindi-text" for="termsAgree">
-                                                    मैं <a href="#">नियम और शर्तों</a> से सहमत हूँ
-                                                </label>
-                                            </div>
-                                            
-                                            <div class="d-grid gap-2">
-                                                <button type="submit" class="btn btn-primary btn-lg hindi-text">पंजीकरण करें</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    
-                                    <!-- Registration Success (initially hidden) -->
-                                    <div id="registrationSuccess" style="display: none;" class="text-center py-5">
-                                        <i class="bi bi-check-circle-fill success-checkmark mb-3"></i>
-                                        <h3 class="hindi-text bold-text mb-3">पंजीकरण सफल!</h3>
-                                        <p class="hindi-text mb-4">आपका पंजीकरण सफलतापूर्वक हो गया है। आपके क्रेडेंशियल्स के साथ पीडीएफ डाउनलोड हो रहा है।</p>
-                                        <div class="d-grid gap-2 col-md-6 mx-auto">
-                                            <button id="downloadCredentials" class="btn btn-primary hindi-text">
-                                                <i class="bi bi-download me-2"></i> क्रेडेंशियल्स डाउनलोड करें
-                                            </button>
-                                            <button id="goToLogin" class="btn btn-outline-primary hindi-text">
-                                                लॉगिन करें
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center mt-3">
-                        <p class="hindi-text text-muted">© 2023 कृषि विभाग, छत्तीसगढ़ शासन। सर्वाधिकार सुरक्षित।</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Bootstrap JS Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Supabase JS -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize Supabase client
-            const supabaseUrl = 'https://evgmvktquwufhdevtahx.supabase.co';
-            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z212a3RxdXd1ZmhkZXZ0YWh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNjU0NTEsImV4cCI6MjA2ODg0MTQ1MX0.-JTBxxMms1U3H1nIzEQN54FEHKeHMP8HbUf7s3nIfIk';
-            const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-            
-            // Setup Three.js for 3D cards
-            setupThreeJS();
-            
-            // Toggle password visibility
-            document.getElementById('togglePassword').addEventListener('click', function() {
-                const passwordInput = document.getElementById('loginPassword');
-                const icon = this.querySelector('i');
-                
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    icon.classList.remove('bi-eye');
-                    icon.classList.add('bi-eye-slash');
-                } else {
-                    passwordInput.type = 'password';
-                    icon.classList.remove('bi-eye-slash');
-                    icon.classList.add('bi-eye');
-                }
-            });
-            
-            // Load divisions from database
-            async function loadDivisions() {
-                try {
-                    const { data, error } = await supabase
-                        .from('divisions')
-                        .select('id, division_name')
-                        .order('division_name', { ascending: true });
-                    
-                    if (error) throw error;
-                    
-                    const divisionSelect = document.getElementById('division');
-                    data.forEach(div => {
-                        const option = document.createElement('option');
-                        option.value = div.id;
-                        option.textContent = div.division_name;
-                        divisionSelect.appendChild(option);
-                    });
-                } catch (error) {
-                    console.error('Error loading divisions:', error);
-                    alert('मंडल लोड करने में त्रुटि');
-                }
-            }
-            
-            // Load districts based on selected division
-            async function loadDistricts(divisionId) {
-                try {
-                    const districtSelect = document.getElementById('district');
-                    districtSelect.innerHTML = '<option value="" selected disabled>जिला चुनें</option>';
-                    
-                    const { data, error } = await supabase
-                        .from('districts')
-                        .select('id, district_name')
-                        .eq('division_id', divisionId)
-                        .order('district_name', { ascending: true });
-                    
-                    if (error) throw error;
-                    
-                    data.forEach(dist => {
-                        const option = document.createElement('option');
-                        option.value = dist.id;
-                        option.textContent = dist.district_name;
-                        districtSelect.appendChild(option);
-                    });
-                    
-                    districtSelect.disabled = false;
-                } catch (error) {
-                    console.error('Error loading districts:', error);
-                    alert('जिले लोड करने में त्रुटि');
-                }
-            }
-            
-            // Load user roles from database
-            async function loadUserRoles(userType) {
-                try {
-                    const roleSelect = document.getElementById('userRole');
-                    roleSelect.innerHTML = '<option value="" selected disabled>भूमिका चुनें</option>';
-                    
-                    const { data, error } = await supabase
-                        .from('user_dropdown')
-                        .select('value, label')
-                        .eq('role', userType)
-                        .order('sort_order', { ascending: true });
-                    
-                    if (error) throw error;
-                    
-                    data.forEach(role => {
-                        const option = document.createElement('option');
-                        option.value = role.value;
-                        option.textContent = role.label;
-                        roleSelect.appendChild(option);
-                    });
-                    
-                    roleSelect.disabled = false;
-                } catch (error) {
-                    console.error('Error loading user roles:', error);
-                    alert('भूमिकाएं लोड करने में त्रुटि');
-                }
-            }
-            
-            // User type change event
-            document.getElementById('userType').addEventListener('change', function() {
-                const userType = this.value;
-                const divisionSelect = document.getElementById('division');
-                const districtSelect = document.getElementById('district');
-                
-                // Reset and disable location selects
-                divisionSelect.disabled = true;
-                districtSelect.disabled = true;
-                
-                // Load appropriate roles
-                loadUserRoles(userType);
-                
-                // Enable division select for division and district users
-                if (userType === 'division' || userType === 'district') {
-                    divisionSelect.disabled = false;
-                }
-            });
-            
-            // Division change event
-            document.getElementById('division').addEventListener('change', function() {
-                const divisionId = this.value;
-                const userType = document.getElementById('userType').value;
-                
-                if (userType === 'district' && divisionId) {
-                    loadDistricts(divisionId);
-                }
-            });
-            
-            // Login form submission
-            document.getElementById('loginForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const username = document.getElementById('loginUsername').value;
-                const password = document.getElementById('loginPassword').value;
-                
-                try {
-                    // Query the users table for the provided username and password
-                    const { data, error } = await supabase
-                        .from('users')
-                        .select('*')
-                        .eq('username', username)
-                        .eq('password', password)
-                        .single();
-                    
-                    if (error) throw error;
-                    
-                    if (data) {
-                        // Successful login
-                        localStorage.setItem('user', JSON.stringify(data));
-                        
-                        // Redirect based on user role
-                        window.location.href = 'dashboard.html';
-                    } else {
-                        alert('अमान्य उपयोगकर्ता नाम या पासवर्ड');
-                    }
-                } catch (error) {
-                    console.error('Login error:', error);
-                    alert('लॉगिन में त्रुटि हुई');
-                }
-            });
-            
-            // Registration form submission
-            document.getElementById('userRegistrationForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const fullName = document.getElementById('fullName').value;
-                const mobileNumber = document.getElementById('mobileNumber').value;
-                const userType = document.getElementById('userType').value;
-                const userRole = document.getElementById('userRole').value;
-                const divisionId = document.getElementById('division').value || null;
-                const districtId = document.getElementById('district').value || null;
-                
-                try {
-                    // Check if mobile number already exists
-                    const { data: existingUser, error: checkError } = await supabase
-                        .from('app_users')
-                        .select('phone')
-                        .eq('phone', mobileNumber)
-                        .single();
-                    
-                    if (existingUser) {
-                        alert('यह मोबाइल नंबर पहले से पंजीकृत है');
-                        return;
-                    }
-                    
-                    // Generate username (first part of name + last 4 digits of phone)
-                    const namePart = fullName.split(' ')[0].toLowerCase();
-                    const phonePart = mobileNumber.slice(-4);
-                    const username = `${namePart}${phonePart}`;
-                    
-                    // Generate password (complex algorithm)
-                    const password = generateSecurePassword();
-                    
-                    // Create user in users table
-                    const { data: userData, error: userError } = await supabase
-                        .from('users')
-                        .insert([
-                            {
-                                username: username,
-                                password: password,
-                                full_name: fullName,
-                                user_role: userRole,
-                                district_id: districtId,
-                                division_id: divisionId,
-                                is_active: true
-                            }
-                        ])
-                        .select();
-                    
-                    if (userError) throw userError;
-                    
-                    // Create user in app_users table
-                    const { data: appUserData, error: appUserError } = await supabase
-                        .from('app_users')
-                        .insert([
-                            {
-                                username: username,
-                                full_name: fullName,
-                                phone: mobileNumber,
-                                user_role: userRole,
-                                district_id: districtId,
-                                division_id: divisionId,
-                                is_active: true
-                            }
-                        ])
-                        .select();
-                    
-                    if (appUserError) throw appUserError;
-                    
-                    // Store credentials for PDF generation
-                    const credentials = {
-                        fullName: fullName,
-                        username: username,
-                        password: password,
-                        userType: getUserTypeText(userType),
-                        userRole: document.getElementById('userRole').options[document.getElementById('userRole').selectedIndex].text
-                    };
-                    
-                    // Show success message and hide form
-                    document.getElementById('registrationForm').style.display = 'none';
-                    document.getElementById('registrationSuccess').style.display = 'block';
-                    
-                    // Generate and download PDF
-                    generateCredentialsPDF(credentials);
-                    
-                } catch (error) {
-                    console.error('Registration error:', error);
-                    alert('पंजीकरण में त्रुटि हुई');
-                }
-            });
-            
-            // Download credentials button
-            document.getElementById('downloadCredentials').addEventListener('click', function() {
-                // This would regenerate the PDF if needed
-                alert('क्रेडेंशियल्स डाउनलोड हो रहे हैं');
-            });
-            
-            // Go to login button
-            document.getElementById('goToLogin').addEventListener('click', function() {
-                document.getElementById('login-tab').click();
-            });
-            
-            // Helper function to get user type text
-            function getUserTypeText(userType) {
-                const types = {
-                    'state': 'राज्य उपयोगकर्ता',
-                    'lab': 'बीज गुण नियंत्रण प्रयोगशाला',
-                    'division': 'मंडल उपयोगकर्ता',
-                    'district': 'जिला उपयोगकर्ता'
-                };
-                return types[userType] || userType;
-            }
-            
-// Generate secure password
-function generateSecurePassword() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-    const length = 10;
-    let password = '';
-    
-    // Ensure at least one uppercase, one lowercase, one number, one special char
-    password += chars.substr(0, 26).charAt(Math.floor(Math.random() * 26)); // Uppercase
-    password += chars.substr(26, 26).charAt(Math.floor(Math.random() * 26)); // Lowercase
-    password += chars.substr(52, 10).charAt(Math.floor(Math.random() * 10)); // Number
-    password += chars.substr(62).charAt(Math.floor(Math.random() * (chars.length - 62))); // Special
-    
-    // Fill the rest of the password
-    for (let i = 4; i < length; i++) {
-        password += chars.charAt(Math.floor(Math.random() * chars.length));
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल - पंजीकरण</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts - Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google Fonts - Noto Sans Devanagari for Hindi -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #2e5aa7;
+      --secondary-color: #f8f9fa;
+      --accent-color: #28a745;
+      --shadow-color: rgba(46, 90, 167, 0.3);
+      --border-radius: 16px;
     }
     
-    // Shuffle the password
-    return password.split('').sort(() => 0.5 - Math.random()).join('');
+    body {
+      font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+    
+    .registration-wrapper {
+      width: 100%;
+      max-width: 700px;
+    }
+    
+    .registration-card {
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 10px 20px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+      padding: 40px;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .registration-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #2e5aa7, #4481eb, #04befe, #2e5aa7);
+      background-size: 300% 100%;
+      animation: gradient 5s ease infinite;
+    }
+    
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .registration-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.12),
+        0 15px 30px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    }
+    
+    .registration-header {
+      text-align: center;
+      margin-bottom: 30px;
+      transform: translateZ(20px);
+      position: relative;
+    }
+    
+    .registration-header h2 {
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-size: 26px;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .registration-header p {
+      color: #6c757d;
+      font-size: 16px;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      margin-bottom: 0;
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+    
+    .form-group label {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 8px;
+      display: block;
+      color: #333;
+    }
+    
+    .form-control, .form-select {
+      height: auto;
+      padding: 14px;
+      font-size: 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      background-color: #f8f9fa;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) inset;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px var(--shadow-color), 0 2px 5px rgba(0, 0, 0, 0.05) inset;
+      background-color: #fff;
+      outline: none;
+      transform: translateY(-2px);
+    }
+    
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 16px 12px;
+      padding-right: 2.5rem;
+    }
+    
+    .btn-register {
+      background: linear-gradient(135deg, #2e5aa7 0%, #1e4184 100%);
+      border: none;
+      font-weight: 600;
+      padding: 14px;
+      font-size: 18px;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(30, 65, 132, 0.3);
+      z-index: 1;
+    }
+    
+    .btn-register:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s;
+      z-index: -1;
+    }
+    
+    .btn-register:hover:before {
+      left: 100%;
+    }
+    
+    .btn-register:hover {
+      background: linear-gradient(135deg, #1e4184 0%, #0d2b5e 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(30, 65, 132, 0.4);
+    }
+    
+    .btn-register:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(30, 65, 132, 0.4);
+    }
+    
+    .form-check-input:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .login-link {
+      font-size: 16px;
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-weight: 500;
+    }
+    
+    .login-link:hover {
+      color: #1e4184;
+      text-decoration: underline;
+    }
+    
+    .registration-footer {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 14px;
+      color: #6c757d;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      border-top: 1px solid #e9ecef;
+      padding-top: 20px;
+    }
+    
+    .tech-support {
+      font-weight: 600;
+      color: #333;
+      background-color: #f8f9fa;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .alert-registration {
+      margin-bottom: 20px;
+      border-radius: 12px;
+      font-weight: 500;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-size: 16px;
+      padding: 15px;
+      border-left: 4px solid #dc3545;
+    }
+    
+    .alert-registration.alert-success {
+      border-left-color: #28a745;
+    }
+    
+    /* Custom dropdown styling */
+    .dropdown-menu {
+      transform: translateY(10px) !important;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .dropdown-menu::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .dropdown-menu::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .dropdown-menu::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+    
+    .dropdown-menu::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+    
+    .dropdown-item {
+      padding: 10px 20px;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+    
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    optgroup {
+      font-weight: 600;
+      color: var(--primary-color);
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+    
+    option {
+      font-weight: normal;
+      color: #333;
+      padding: 10px;
+    }
+    
+    .form-check-label {
+      font-family: 'Noto Sans Devanagari', sans-serif;
+      font-size: 16px;
+    }
+    
+    @media (max-width: 576px) {
+      .registration-card {
+        padding: 30px 20px;
+      }
+      
+      .registration-header h2 {
+        font-size: 22px;
+      }
+    }
+    
+    .spinner-border-sm {
+      margin-right: 8px;
+    }
+
+    .password-display {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 20px;
+      text-align: center;
+      display: none;
+    }
+
+    .password-display h4 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+
+    .password-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #333;
+      padding: 8px 15px;
+      background-color: #fff;
+      border-radius: 8px;
+      display: inline-block;
+      border: 2px dashed var(--primary-color);
+    }
+
+    .registration-success {
+      text-align: center;
+      display: none;
+    }
+
+    .registration-success i {
+      font-size: 80px;
+      color: #28a745;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .registration-success h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-family: 'Noto Sans Devanagari', sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="registration-wrapper">
+    <div class="registration-card">
+      <div class="registration-header">
+        <h2>छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</h2>
+        <p>कृषि विभाग, छत्तीसगढ़ शासन</p>
+      </div>
+      
+      <div id="registrationError" class="alert alert-danger alert-registration d-none"></div>
+      
+      <div id="registrationForm">
+        <form id="userRegistrationForm">
+          <div class="form-group">
+            <label for="fullName">पूरा नाम</label>
+            <input type="text" class="form-control" id="fullName" placeholder="अपना पूरा नाम दर्ज करें" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="mobileNumber">मोबाइल नंबर</label>
+            <input type="tel" class="form-control" id="mobileNumber" placeholder="10 अंकों का मोबाइल नंबर दर्ज करें" pattern="[0-9]{10}" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="userType">उपयोगकर्ता प्रकार</label>
+            <select class="form-select" id="userType" required>
+              <option value="">-- उपयोगकर्ता प्रकार चुनें --</option>
+              <option value="state">राज्य स्तर</option>
+              <option value="certification">बीज प्रमाणीकरण संस्था</option>
+              <option value="division">संभाग स्तर</option>
+              <option value="district">जिला स्तर</option>
+            </select>
+          </div>
+          
+          <div class="form-group" id="divisionGroup" style="display: none;">
+            <label for="division">संभाग</label>
+            <select class="form-select" id="division">
+              <option value="">-- संभाग चुनें --</option>
+              <!-- Will be populated from database -->
+            </select>
+          </div>
+          
+          <div class="form-group" id="districtGroup" style="display: none;">
+            <label for="district">जिला</label>
+            <select class="form-select" id="district">
+              <option value="">-- जिला चुनें --</option>
+              <!-- Will be populated from database based on division -->
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">ईमेल (वैकल्पिक)</label>
+            <input type="email" class="form-control" id="email" placeholder="अपना ईमेल दर्ज करें">
+          </div>
+          
+          <div class="form-check mb-4">
+            <input type="checkbox" class="form-check-input" id="termsAgree" required>
+            <label class="form-check-label" for="termsAgree">
+              मैं <a href="#" class="terms-link">नियम और शर्तों</a> से सहमत हूँ
+            </label>
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-register w-100">
+            <i class="bi bi-person-plus-fill me-2"></i>पंजीकरण करें
+          </button>
+          
+          <div class="text-center mt-3">
+            <a href="index.html" class="login-link">पहले से ही एक खाता है? लॉगिन करें</a>
+          </div>
+        </form>
+      </div>
+      
+      <div id="passwordDisplay" class="password-display">
+        <h4>आपका पासवर्ड</h4>
+        <div class="password-value" id="generatedPassword">Abc123@xyz</div>
+        <p class="mt-3 mb-0">कृपया इस पासवर्ड को सुरक्षित रखें। पहली बार लॉगिन करने के बाद आप इसे बदल सकते हैं।</p>
+      </div>
+      
+      <div id="registrationSuccess" class="registration-success">
+        <i class="bi bi-check-circle-fill"></i>
+        <h3>पंजीकरण सफल!</h3>
+        <p>आपका पंजीकरण सफलतापूर्वक हो गया है। आपके क्रेडेंशियल्स का पीडीएफ डाउनलोड हो रहा है।</p>
+        <button id="downloadCredentials" class="btn btn-success mb-3">
+          <i class="bi bi-download me-2"></i>क्रेडेंशियल्स डाउनलोड करें
+        </button>
+        <div>
+          <a href="index.html" class="btn btn-primary">
+            <i class="bi bi-box-arrow-in-right me-2"></i>लॉगिन पेज पर जाएं
+          </a>
+        </div>
+      </div>
+      
+      <div class="registration-footer">
+        <p>© 2023 कृषि विभाग, छत्तीसगढ़ शासन। सर्वाधिकार सुरक्षित।</p>
+        <p>तकनीकी सहायता: <span class="tech-support">शैलेंद्र सिंह चौहान - 9399207068</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    // Initialize Supabase client
+    const SUPABASE_URL = 'https://evgmvktquwufhdevtahx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2Z212a3RxdXd1ZmhkZXZ0YWh4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMyNjU0NTEsImV4cCI6MjA2ODg0MTQ1MX0.-JTBxxMms1U3H1nIzEQN54FEHKeHMP8HbUf7s3nIfIk';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load divisions from database
+      loadDivisions();
+      
+      // User type change event
+      document.getElementById('userType').addEventListener('change', function() {
+        const userType = this.value;
+        const divisionGroup = document.getElementById('divisionGroup');
+        const districtGroup = document.getElementById('districtGroup');
+        
+        // Hide both by default
+        divisionGroup.style.display = 'none';
+        districtGroup.style.display = 'none';
+        
+        // Show based on user type
+        if (userType === 'division') {
+          divisionGroup.style.display = 'block';
+        } else if (userType === 'district') {
+          divisionGroup.style.display = 'block';
+          // Districts will be loaded when division is selected
+        }
+      });
+      
+      // Division change event
+      document.getElementById('division').addEventListener('change', function() {
+        const divisionId = this.value;
+        const userType = document.getElementById('userType').value;
+        
+        if (userType === 'district' && divisionId) {
+          document.getElementById('districtGroup').style.display = 'block';
+          loadDistricts(divisionId);
+        }
+      });
+      
+      // Registration form submission
+      document.getElementById('userRegistrationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const fullName = document.getElementById('fullName').value;
+        const mobileNumber = document.getElementById('mobileNumber').value;
+        const userType = document.getElementById('userType').value;
+        const divisionId = document.getElementById('division').value || null;
+        const districtId = document.getElementById('district').value || null;
+        const email = document.getElementById('email').value || null;
+        
+        // Basic validation
+        if (!userType) {
+          showError('कृपया उपयोगकर्ता प्रकार चुनें।');
+          return;
+        }
+        
+        if (userType === 'division' && !divisionId) {
+          showError('कृपया संभाग चुनें।');
+          return;
+        }
+        
+        if (userType === 'district' && (!divisionId || !districtId)) {
+          showError('कृपया संभाग और जिला दोनों चुनें।');
+          return;
+        }
+        
+        // Show loading state
+        const submitBtn = document.querySelector('.btn-register');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> पंजीकरण हो रहा है...';
+        
+        // Check if mobile number already exists
+        checkMobileExists(mobileNumber)
+          .then(exists => {
+            if (exists) {
+              showError('यह मोबाइल नंबर पहले से पंजीकृत है। कृपया अन्य मोबाइल नंबर का उपयोग करें।');
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnText;
+            } else {
+              // Generate username and password
+              const username = generateUsername(fullName, mobileNumber);
+              const password = generateSecurePassword();
+              
+              // Create user record
+              registerUser(username, password, fullName, mobileNumber, email, userType, divisionId, districtId)
+                .then(success => {
+                  if (success) {
+                    // Show password and success message
+                    document.getElementById('registrationForm').style.display = 'none';
+                    document.getElementById('generatedPassword').textContent = password;
+                    document.getElementById('passwordDisplay').style.display = 'block';
+                    document.getElementById('registrationSuccess').style.display = 'block';
+                    
+                    // Generate PDF
+                    generateCredentialsPDF(username, password, fullName, userType, divisionId, districtId);
+                  } else {
+                    showError('पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                  }
+                })
+                .catch(error => {
+                  showError('पंजीकरण में त्रुटि हुई: ' + error.message);
+                  submitBtn.disabled = false;
+                  submitBtn.innerHTML = originalBtnText;
+                });
+            }
+          })
+          .catch(error => {
+            showError('मोबाइल नंबर की जांच में त्रुटि: ' + error.message);
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+          });
+      });
+      
+      // Download credentials button
+      document.getElementById('downloadCredentials').addEventListener('click', function() {
+        // This would regenerate the PDF if needed
+        const fullName = document.getElementById('fullName').value;
+        const userType = document.getElementById('userType').value;
+        const divisionId = document.getElementById('division').value || null;
+        const districtId = document.getElementById('district').value || null;
+        const username = generateUsername(fullName, document.getElementById('mobileNumber').value);
+        const password = document.getElementById('generatedPassword').textContent;
+        
+        generateCredentialsPDF(username, password, fullName, userType, divisionId, districtId);
+      });
+    });
+    
+    // Load divisions from database
+    async function loadDivisions() {
+      try {
+        const { data, error } = await supabase
+          .from('divisions')
+          .select('id, division_name')
+          .order('division_name', { ascending: true });
+        
+        if (error) throw error;
+        
+        const divisionSelect = document.getElementById('division');
+        data.forEach(div => {
+          const option = document.createElement('option');
+          option.value = div.id;
+          option.textContent = div.division_name;
+          divisionSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading divisions:', error);
+        showError('संभागों को लोड करने में त्रुटि हुई');
+      }
+    }
+    
+    // Load districts based on selected division
+    async function loadDistricts(divisionId) {
+      try {
+        const districtSelect = document.getElementById('district');
+        districtSelect.innerHTML = '<option value="">-- जिला चुनें --</option>';
+        
+        const { data, error } = await supabase
+          .from('districts')
+          .select('id, district_name')
+          .eq('division_id', divisionId)
+          .order('district_name', { ascending: true });
+        
+        if (error) throw error;
+        
+        data.forEach(dist => {
+          const option = document.createElement('option');
+          option.value = dist.id;
+          option.textContent = dist.district_name;
+          districtSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading districts:', error);
+        showError('जिलों को लोड करने में त्रुटि हुई');
+      }
+    }
+    
+    // Check if mobile number already exists
+    async function checkMobileExists(mobileNumber) {
+      try {
+        const { data, error, count } = await supabase
+          .from('app_users')
+          .select('id', { count: 'exact', head: true })
+          .eq('phone', mobileNumber);
+        
+        if (error) throw error;
+        
+        return count > 0;
+      } catch (error) {
+        console.error('Error checking mobile number:', error);
+        throw error;
+      }
+    }
+    
+    // Register user
+    async function registerUser(username, password, fullName, mobileNumber, email, userType, divisionId, districtId) {
+      try {
+        // Create user in users table
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .insert([
+            {
+              username: username,
+              password: password,
+              full_name: fullName,
+              user_role: userType,
+              district_id: districtId,
+              division_id: divisionId,
+              is_active: true
+            }
+          ]);
+        
+        if (userError) throw userError;
+        
+        // Create user in app_users table
+        const { data: appUserData, error: appUserError } = await supabase
+          .from('app_users')
+          .insert([
+            {
+              username: username,
+              full_name: fullName,
+              phone: mobileNumber,
+              email: email,
+              user_role: userType,
+              district_id: districtId,
+              division_id: divisionId,
+              is_active: true
+            }
+          ]);
+        
+        if (appUserError) throw appUserError;
+        
+        return true;
+      } catch (error) {
+        console.error('Error registering user:', error);
+        throw error;
+      }
+    }
+    
+    // Generate username from name and mobile
+    function generateUsername(fullName, mobileNumber) {
+      // Get first part of name (before first space)
+      const namePart = fullName.split(' ')[0].toLowerCase();
+      // Get last 4 digits of phone number
+      const phonePart = mobileNumber.slice(-4);
+      // Combine them
+      return `${namePart}${phonePart}`;
+    }
+    
+// Generate secure password
+function generateSecurePassword() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+  const length = 12;
+  let password = '';
+  
+  // Ensure at least one uppercase letter
+  password += chars.substr(0, 26).charAt(Math.floor(Math.random() * 26));
+  
+  // Ensure at least one lowercase letter
+  password += chars.substr(26, 26).charAt(Math.floor(Math.random() * 26));
+  
+  // Ensure at least one number
+  password += chars.substr(52, 10).charAt(Math.floor(Math.random() * 10));
+  
+  // Ensure at least one special character
+  password += chars.substr(62).charAt(Math.floor(Math.random() * (chars.length - 62)));
+  
+  // Fill the rest of the password
+  for (let i = 4; i < length; i++) {
+    password += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  
+  // Shuffle the password characters
+  return password.split('').sort(() => 0.5 - Math.random()).join('');
 }
 
 // Generate PDF with credentials
-function generateCredentialsPDF(credentials) {
-    // Create a new jsPDF instance
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-    
-    // Add content to the PDF
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(20);
-    doc.text("बीज पोर्टल उपयोगकर्ता क्रेडेंशियल्स", 105, 20, null, null, "center");
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    doc.text("छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल", 105, 30, null, null, "center");
-    doc.text("कृषि विभाग, छत्तीसगढ़ शासन", 105, 40, null, null, "center");
-    
-    doc.line(20, 45, 190, 45);
-    
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(14);
-    doc.text("उपयोगकर्ता विवरण", 20, 60);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-    doc.text("पूरा नाम:", 20, 75);
-    doc.text(credentials.fullName, 80, 75);
-    
-    doc.text("उपयोगकर्ता प्रकार:", 20, 85);
-    doc.text(credentials.userType, 80, 85);
-    
-    doc.text("भूमिका:", 20, 95);
-    doc.text(credentials.userRole, 80, 95);
-    
-    doc.setFont("helvetica", "bold");
-    doc.text("लॉगिन क्रेडेंशियल्स", 20, 115);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text("उपयोगकर्ता नाम:", 20, 130);
-    doc.setFont("courier", "bold");
-    doc.text(credentials.username, 80, 130);
-    
-    doc.setFont("helvetica", "normal");
-    doc.text("पासवर्ड:", 20, 140);
-    doc.setFont("courier", "bold");
-    doc.text(credentials.password, 80, 140);
-    
-    doc.setFont("helvetica", "italic");
-    doc.setFontSize(10);
-    doc.text("नोट: कृपया अपने क्रेडेंशियल्स सुरक्षित रखें और किसी के साथ साझा न करें।", 20, 160);
-    doc.text("पहली बार लॉगिन करने के बाद अपना पासवर्ड बदलने की सलाह दी जाती है।", 20, 170);
-    
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.text("जारी करने की तिथि: " + new Date().toLocaleDateString(), 20, 190);
-    doc.text("© कृषि विभाग, छत्तीसगढ़ शासन", 20, 200);
-    
-    // Save the PDF
-    doc.save(`beej_credentials_${credentials.username}.pdf`);
+function generateCredentialsPDF(username, password, fullName, userType, divisionId, districtId) {
+  // Create a new jsPDF instance
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  
+  // Add content to the PDF
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+  doc.text("बीज पोर्टल उपयोगकर्ता क्रेडेंशियल्स", 105, 20, null, null, "center");
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.text("छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल", 105, 30, null, null, "center");
+  doc.text("कृषि विभाग, छत्तीसगढ़ शासन", 105, 40, null, null, "center");
+  
+  doc.line(20, 45, 190, 45);
+  
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("उपयोगकर्ता विवरण", 20, 60);
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.text("पूरा नाम:", 20, 75);
+  doc.text(fullName, 80, 75);
+  
+  // Get user type text
+  let userTypeText = "";
+  switch(userType) {
+    case "state":
+      userTypeText = "राज्य स्तर";
+      break;
+    case "certification":
+      userTypeText = "बीज प्रमाणीकरण संस्था";
+      break;
+    case "division":
+      userTypeText = "संभाग स्तर";
+      break;
+    case "district":
+      userTypeText = "जिला स्तर";
+      break;
+    default:
+      userTypeText = userType;
+  }
+  
+  doc.text("उपयोगकर्ता प्रकार:", 20, 85);
+  doc.text(userTypeText, 80, 85);
+  
+  // Add division/district info if applicable
+  let yPos = 95;
+  if (divisionId) {
+    // In real implementation, you would get division name from database
+    doc.text("संभाग:", 20, yPos);
+    doc.text("Division " + divisionId, 80, yPos);
+    yPos += 10;
+  }
+  
+  if (districtId) {
+    // In real implementation, you would get district name from database
+    doc.text("जिला:", 20, yPos);
+    doc.text("District " + districtId, 80, yPos);
+    yPos += 10;
+  }
+  
+  doc.setFont("helvetica", "bold");
+  doc.text("लॉगिन क्रेडेंशियल्स", 20, yPos + 10);
+  
+  doc.setFont("helvetica", "normal");
+  doc.text("उपयोगकर्ता नाम:", 20, yPos + 25);
+  doc.setFont("courier", "bold");
+  doc.text(username, 80, yPos + 25);
+  
+  doc.setFont("helvetica", "normal");
+  doc.text("पासवर्ड:", 20, yPos + 35);
+  doc.setFont("courier", "bold");
+  doc.text(password, 80, yPos + 35);
+  
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(10);
+  doc.text("नोट: कृपया अपने क्रेडेंशियल्स सुरक्षित रखें और किसी के साथ साझा न करें।", 20, yPos + 55);
+  doc.text("पहली बार लॉगिन करने के बाद अपना पासवर्ड बदलने की सलाह दी जाती है।", 20, yPos + 65);
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text("जारी करने की तिथि: " + new Date().toLocaleDateString(), 20, yPos + 85);
+  doc.text("© कृषि विभाग, छत्तीसगढ़ शासन", 20, yPos + 95);
+  
+  // Save the PDF
+  doc.save(`beej_credentials_${username}.pdf`);
 }
 
-// Setup Three.js for 3D cards
-function setupThreeJS() {
-    // Setup for each 3D card
-    setupCard('canvas-container-1', 0x0a4275, 0x1e88e5);
-    setupCard('canvas-container-2', 0x0a4275, 0x1e88e5);
-    setupCard('canvas-container-3', 0x0a4275, 0x1e88e5);
+// Show error message
+function showError(message) {
+  const errorDiv = document.getElementById('registrationError');
+  errorDiv.textContent = message;
+  errorDiv.classList.remove('d-none');
+  
+  // Scroll to error message
+  errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  
+  // Hide after 5 seconds
+  setTimeout(() => {
+    errorDiv.classList.add('d-none');
+  }, 5000);
 }
 
-function setupCard(containerId, color1, color2) {
-    const container = document.getElementById(containerId);
-    if (!container) return;
+// Get division name by ID
+async function getDivisionName(divisionId) {
+  try {
+    const { data, error } = await supabase
+      .from('divisions')
+      .select('division_name')
+      .eq('id', divisionId)
+      .single();
     
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    if (error) throw error;
     
-    // Create scene, camera, and renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    return data.division_name;
+  } catch (error) {
+    console.error('Error getting division name:', error);
+    return "Division " + divisionId;
+  }
+}
+
+// Get district name by ID
+async function getDistrictName(districtId) {
+  try {
+    const { data, error } = await supabase
+      .from('districts')
+      .select('district_name')
+      .eq('id', districtId)
+      .single();
     
-    renderer.setSize(width, height);
-    container.appendChild(renderer.domElement);
+    if (error) throw error;
     
-    // Create particles
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 100;
-    
-    const posArray = new Float32Array(particlesCount * 3);
-    
-    for (let i = 0; i < particlesCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 5;
+    return data.district_name;
+  } catch (error) {
+    console.error('Error getting district name:', error);
+    return "District " + districtId;
+  }
+}
+// Force dropdown to open downward
+document.getElementById('userType').addEventListener('click', function() {
+  const selectElement = this;
+  setTimeout(function() {
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    if (dropdownMenu) {
+      dropdownMenu.style.transform = 'translate3d(0px, 10px, 0px) !important';
+      dropdownMenu.style.top = '100%';
+      dropdownMenu.style.bottom = 'auto';
     }
-    
-    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-    
-    // Material
-    const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.05,
-        color: 0xffffff,
-        transparent: true,
-        opacity: 0.8
-    });
-    
-    // Mesh
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-    
-    // Position camera
-    camera.position.z = 3;
-    
-    // Animation
-    const animate = () => {
-        requestAnimationFrame(animate);
-        
-        particlesMesh.rotation.x += 0.001;
-        particlesMesh.rotation.y += 0.001;
-        
-        renderer.render(scene, camera);
-    };
-    
-    animate();
-    
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        const newWidth = container.clientWidth;
-        const newHeight = container.clientHeight;
-        
-        camera.aspect = newWidth / newHeight;
-        camera.updateProjectionMatrix();
-        
-        renderer.setSize(newWidth, newHeight);
-    });
+  }, 10);
+});
+
+// Check if mobile exists on input change
+document.getElementById('mobileNumber').addEventListener('blur', async function() {
+  const mobileNumber = this.value;
+  if (mobileNumber && mobileNumber.length === 10) {
+    try {
+      const exists = await checkMobileExists(mobileNumber);
+      if (exists) {
+        showError('यह मोबाइल नंबर पहले से पंजीकृत है। कृपया अन्य मोबाइल नंबर का उपयोग करें।');
+      }
+    } catch (error) {
+      console.error('Error checking mobile:', error);
+    }
+  }
+});
+
+// Update user type label based on selection
+document.getElementById('userType').addEventListener('change', function() {
+  const userType = this.value;
+  let userTypeText = "";
+  
+  switch(userType) {
+    case "state":
+      userTypeText = "राज्य स्तर";
+      break;
+    case "certification":
+      userTypeText = "बीज प्रमाणीकरण संस्था";
+      break;
+    case "division":
+      userTypeText = "संभाग स्तर";
+      break;
+    case "district":
+      userTypeText = "जिला स्तर";
+      break;
+  }
+  
+  if (userTypeText) {
+    document.querySelector('label[for="userType"]').innerHTML = `उपयोगकर्ता प्रकार <small class="text-muted">(${userTypeText})</small>`;
+  } else {
+    document.querySelector('label[for="userType"]').innerHTML = 'उपयोगकर्ता प्रकार';
+  }
+});
+
+// Initialize tooltips
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl);
+});
+
+// Check for remembered user
+const rememberedUser = localStorage.getItem('rememberedUser');
+if (rememberedUser) {
+  document.getElementById('userType').value = rememberedUser;
+  document.getElementById('rememberMe').checked = true;
 }
 
-// Initialize the page
-loadDivisions();
+// Terms and conditions modal
+document.querySelector('.terms-link').addEventListener('click', function(e) {
+  e.preventDefault();
+  // Show terms modal (in real implementation)
+  alert('नियम और शर्तें यहां दिखाई जाएंगी');
+});
+
+// Function to validate email format
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return email === '' || emailRegex.test(email);
+}
+
+// Email validation on input
+document.getElementById('email').addEventListener('input', function() {
+  const email = this.value;
+  if (email && !isValidEmail(email)) {
+    this.classList.add('is-invalid');
+    this.setCustomValidity('कृपया एक वैध ईमेल पता दर्ज करें');
+  } else {
+    this.classList.remove('is-invalid');
+    this.setCustomValidity('');
+  }
+});
+
+// Mobile number validation - only allow digits
+document.getElementById('mobileNumber').addEventListener('input', function() {
+  this.value = this.value.replace(/\D/g, '');
+  
+  if (this.value.length > 10) {
+    this.value = this.value.slice(0, 10);
+  }
+  
+  if (this.value.length === 10) {
+    this.classList.add('is-valid');
+  } else {
+    this.classList.remove('is-valid');
+  }
+});
+
+// Full name validation - at least two words
+document.getElementById('fullName').addEventListener('input', function() {
+  const nameParts = this.value.trim().split(/\s+/);
+  
+  if (nameParts.length >= 2 && nameParts[0].length > 0 && nameParts[1].length > 0) {
+    this.classList.add('is-valid');
+  } else {
+    this.classList.remove('is-valid');
+  }
+});
+
+// Show loading indicators when fetching divisions/districts
+function showLoading(selectElement) {
+  const loadingSpinner = document.createElement('span');
+  loadingSpinner.className = 'spinner-border spinner-border-sm ms-2';
+  loadingSpinner.setAttribute('role', 'status');
+  loadingSpinner.setAttribute('aria-hidden', 'true');
+  
+  selectElement.parentNode.appendChild(loadingSpinner);
+  selectElement.disabled = true;
+  
+  return loadingSpinner;
+}
+
+function hideLoading(selectElement, spinner) {
+  if (spinner && spinner.parentNode) {
+    spinner.parentNode.removeChild(spinner);
+  }
+  selectElement.disabled = false;
+}
+</script>
+</body>
+</html>
+
 
