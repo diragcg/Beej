@@ -25,6 +25,12 @@
   </style>
 </head>
 <body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">सामग्री लोड हो रही है...</div>
+  </div>
+
   <!-- Sidebar -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -36,7 +42,7 @@
     
     <ul class="sidebar-menu">
       <li>
-        <a href="#" class="active" data-page="dashboard.html" id="dashboardLink">
+        <a href="#" class="active" data-page="dashboard_content.html" id="dashboardLink">
           <i class="bi bi-grid-1x2"></i>
           <span>डैशबोर्ड</span>
         </a>
@@ -154,12 +160,99 @@
   
   <!-- Profile Modal -->
   <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
-    <!-- Modal content here (Profile form) -->
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalLabel">प्रोफाइल</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-4">
+            <div class="user-avatar mx-auto mb-3" style="width: 80px; height: 80px; font-size: 32px;" id="profileAvatar">U</div>
+            <h4 class="mb-1" id="profileName">उपयोगकर्ता</h4>
+            <p class="text-muted" id="profileRole">भूमिका</p>
+          </div>
+          
+          <form id="profileForm">
+            <div class="mb-3">
+              <label for="fullName" class="form-label">पूरा नाम</label>
+              <input type="text" class="form-control" id="fullName" readonly>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="email" class="form-label">ईमेल</label>
+                <input type="email" class="form-control" id="email">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="phone" class="form-label">फोन नंबर</label>
+                <input type="tel" class="form-control" id="phone">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">बंद करें</button>
+          <button type="button" class="btn btn-primary" id="saveProfileBtn">सेव करें</button>
+        </div>
+      </div>
+    </div>
   </div>
   
   <!-- Change Password Modal -->
   <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <!-- Modal content here (Password change form) -->
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">पासवर्ड बदलें</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            सुरक्षा कारणों से, कृपया एक मजबूत पासवर्ड चुनें जिसमें अक्षर, संख्या और विशेष वर्ण हों।
+          </div>
+          
+          <form id="changePasswordForm">
+            <div class="mb-3">
+              <label for="currentPassword" class="form-label">वर्तमान पासवर्ड</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="currentPassword" required>
+                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="currentPassword">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">नया पासवर्ड</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="newPassword" required>
+                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="newPassword">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+              <div id="passwordStrength" class="form-text"></div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">पासवर्ड की पुष्टि करें</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="confirmPassword" required>
+                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="confirmPassword">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+              <div id="passwordMatch" class="form-text"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">रद्द करें</button>
+          <button type="button" class="btn btn-primary" id="changePasswordBtn">पासवर्ड अपडेट करें</button>
+        </div>
+      </div>
+    </div>
   </div>
   
   <!-- Logout Confirmation Modal -->
