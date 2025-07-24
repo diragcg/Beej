@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>निरीक्षण प्रतिवेदन प्रपत्र 3 - छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts - Poppins -->
+  <link href="../css/style.css" rel="stylesheet">
+  
+  <style>
+    /* Add any page-specific styles here */
+    .form-label {
+      font-weight: 600;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(46, 90, 167, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h1 class="mb-4">निरीक्षण प्रतिवेदन प्रपत्र 3</h1>
+    
+    <!-- Data Entry Form -->
+    <div class="card mb-4">
+      <div class="card-header">नया निरीक्षण प्रतिवेदन प्रपत्र 3 जोड़ें</div>
+      <div class="card-body">
+        <form id="inspectionReportForm3">
+          <div class="mb-3">
+            <label for="district" class="form-label">जिला</label>
+            <input type="text" class="form-control" id="district" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="complaintType" class="form-label">शिकायत का प्रकार (लिखित/समाचार पत्र/दूरभाष)</label>
+            <select class="form-select" id="complaintType" required>
+              <option value="">-- प्रकार चुनें --</option>
+              <option value="लिखित">लिखित</option>
+              <option value="समाचार पत्र">समाचार पत्र</option>
+              <option value="दूरभाष">दूरभाष</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="relatedFirmName" class="form-label">संबंधित फर्म का नाम जिसके विरूद्ध शिकायत प्राप्त हुई</label>
+            <input type="text" class="form-control" id="relatedFirmName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="samplesTakenDuringInquiry" class="form-label">शिकायत की जांच के दौरान क्या नमूने लिये गये यदि हां/नहीं</label>
+            <select class="form-select" id="samplesTakenDuringInquiry" required>
+              <option value="">-- चुनें --</option>
+              <option value="हां">हां</option>
+              <option value="नहीं">नहीं</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="sampleTestResult" class="form-label">नमूना परीक्षण उपरांत मानक/अमानक</label>
+            <input type="text" class="form-control" id="sampleTestResult">
+          </div>
+          
+          <div class="mb-3">
+            <label for="briefFacts" class="form-label">शिकायत की जांच में पाये गये तथ्य संक्षिप्त विवरण</label>
+            <textarea class="form-control" id="briefFacts" rows="3"></textarea>
+          </div>
+          
+          <div class="mb-3">
+            <label for="actionTaken" class="form-label">कार्यवाही</label>
+            <input type="text" class="form-control" id="actionTaken">
+          </div>
+          
+          <div class="mb-3">
+            <label for="date" class="form-label">दिनांक</label>
+            <input type="date" class="form-control" id="date" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="remark" class="form-label">रिमार्क</label>
+            <textarea class="form-control" id="remark" rows="3"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>जोड़ें
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Data Table -->
+    <div class="card">
+      <div class="card-header">निरीक्षण प्रतिवेदन प्रपत्र 3</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>क्र.</th>
+                <th>जिला</th>
+                <th>शिकायत का प्रकार</th>
+                <th>संबंधित फर्म का नाम</th>
+                <th>नमूने लिये गये?</th>
+                <th>नमूना परीक्षण का परिणाम</th>
+                <th>जांच निष्कर्ष</th>
+                <th>कार्यवाही</th>
+                <th>दिनांक</th>
+                <th>कार्य</th>
+              </tr>
+            </thead>
+            <tbody id="inspectionReportForm3TableBody">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- App JS -->
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/inspectionReportForm3.js"></script>
+  
+</body>
+</html>
 
