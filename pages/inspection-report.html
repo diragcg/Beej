@@ -1,1 +1,225 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>निरीक्षण प्रतिवेदन - छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  
+  <!-- Google Fonts - Poppins -->
+  <link href="../css/style.css" rel="stylesheet">
+  
+  <style>
+    /* Add any page-specific styles here */
+    .form-label {
+      font-weight: 600;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(46, 90, 167, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-4">
+    <h1 class="mb-4">निरीक्षण प्रतिवेदन</h1>
+    
+    <!-- Data Entry Form -->
+    <div class="card mb-4">
+      <div class="card-header">नया निरीक्षण प्रतिवेदन जोड़ें</div>
+      <div class="card-body">
+        <form id="inspectionReportForm">
+          <div class="mb-3">
+            <label for="districtName" class="form-label">जिले का नाम</label>
+            <input type="text" class="form-control" id="districtName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="totalSeedSaleCenters" class="form-label">कुल बीज विक्रय केन्द्रों की संख्या</label>
+            <input type="number" class="form-control" id="totalSeedSaleCenters" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="seedInspectorName" class="form-label">बीज निरीक्षक&#x2F;अधिकारी का नाम</label>
+            <input type="text" class="form-control" id="seedInspectorName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="seedSaleCenterName" class="form-label">बीज विक्रय केन्द्र का नाम</label>
+            <input type="text" class="form-control" id="seedSaleCenterName" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="causeNotice" class="form-label">कारण बताओं नोटिस</label>
+            <input type="number" class="form-control" id="causeNotice">
+          </div>
+          
+          <div class="mb-3">
+            <label for="saleRestriction" class="form-label">विक्रय प्रतिबंध</label>
+            <input type="number" class="form-control" id="saleRestriction">
+          </div>
+          
+          <div class="mb-3">
+            <label for="licenseRevoked" class="form-label">लायसेंस निरस्त</label>
+            <input type="number" class="form-control" id="licenseRevoked">
+          </div>
+          
+          <div class="mb-3">
+            <label for="firCount" class="form-label">एफ.आई.आर.</label>
+            <input type="number" class="form-control" id="firCount">
+          </div>
+          
+          <div class="mb-3">
+            <label for="totalActions" class="form-label">कुल कार्यवाही की संख्या</label>
+            <input type="number" class="form-control" id="totalActions" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="remark" class="form-label">रिमार्क</label>
+            <textarea class="form-control" id="remark" rows="3"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>जोड़ें
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Data Table -->
+    <div class="card">
+      <div class="card-header">निरीक्षण प्रतिवेदन</div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>क्र.</th>
+                <th>जिले का नाम</th>
+                <th>कुल बीज विक्रय केन्द्रों की संख्या</th>
+                <th>बीज निरीक्षक&#x2F;अधिकारी का नाम</th>
+                <th>बीज विक्रय केन्द्र का नाम</th>
+                <th>कुल कार्यवाही की संख्या</th>
+                <th>रिमार्क</th>
+                <th>कार्य</th>
+              </tr>
+            </thead>
+            <tbody id="inspectionReportTableBody">
+              <!-- Sample data will be loaded here -->
+              <tr>
+                <td>1</td>
+                <td>रायपुर</td>
+                <td>50</td>
+                <td>जॉन डो</td>
+                <td>अमर बीज भंडार</td>
+                <td>2</td>
+                <td>सब ठीक है</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- App JS -->
+  <script src="../js/config.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/inspectionReport.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is logged in
+      if (!Auth.currentUser) {
+        window.location.href = '../index.html';
+        return;
+      }
+      
+      // Initialize the form
+      const inspectionReportForm = document.getElementById('inspectionReportForm');
+      inspectionReportForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form values
+        const districtName = document.getElementById('districtName').value;
+        const totalSeedSaleCenters = document.getElementById('totalSeedSaleCenters').value;
+        const seedInspectorName = document.getElementById('seedInspectorName').value;
+        const seedSaleCenterName = document.getElementById('seedSaleCenterName').value;
+        const causeNotice = document.getElementById('causeNotice').value;
+        const saleRestriction = document.getElementById('saleRestriction').value;
+        const licenseRevoked = document.getElementById('licenseRevoked').value;
+        const firCount = document.getElementById('firCount').value;
+        const totalActions = document.getElementById('totalActions').value;
+        const remark = document.getElementById('remark').value;
+        
+        // Create data object
+        const reportData = {
+          districtName: districtName,
+          totalSeedSaleCenters: totalSeedSaleCenters,
+          seedInspectorName: seedInspectorName,
+          seedSaleCenterName: seedSaleCenterName,
+          causeNotice: causeNotice,
+          saleRestriction: saleRestriction,
+          licenseRevoked: licenseRevoked,
+          firCount: firCount,
+          totalActions: totalActions,
+          remark: remark
+        };
+        
+        // Log data
+        console.log('Report Data:', reportData);
+        
+        // Add row to table
+        const tableBody = document.getElementById('inspectionReportTableBody');
+        const newRow = tableBody.insertRow();
+        
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+        const cell3 = newRow.insertCell(2);
+        const cell4 = newRow.insertCell(3);
+        const cell5 = newRow.insertCell(4);
+        const cell6 = newRow.insertCell(5);
+        const cell7 = newRow.insertCell(6);
+        const cell8 = newRow.insertCell(7);
+        
+        cell1.textContent = tableBody.rows.length;
+        cell2.textContent = districtName;
+        cell3.textContent = totalSeedSaleCenters;
+        cell4.textContent = seedInspectorName;
+        cell5.textContent = seedSaleCenterName;
+        cell6.textContent = totalActions;
+        cell7.textContent = remark;
+        cell8.innerHTML = `
+          <button class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-eye"></i>
+          </button>
+          <button class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-pencil"></i>
+          </button>
+        `;
+        
+        // Clear form
+        inspectionReportForm.reset();
+      });
+    });
+  </script>
+</body>
+</html>
 
