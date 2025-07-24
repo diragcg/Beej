@@ -3,180 +3,987 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>बीज परीक्षण पोर्टल - डैशबोर्ड</title>
+  <title>डैशबोर्ड - छत्तीसगढ़ राज्य बीज वितरण एवं गुण नियंत्रण मॉड्यूल</title>
   
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
-  <!-- DataTables CSS -->
-  <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
   
-  <!-- Noto Sans Devanagari font for Hindi -->
+  <!-- Google Fonts - Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google Fonts - Noto Sans Devanagari for Hindi -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Chart.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/Chart.min.css">
+  
   <style>
+    :root {
+      --primary-color: #2e5aa7;
+      --secondary-color: #f8f9fa;
+      --accent-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+      --dark-color: #343a40;
+      --light-color: #f8f9fa;
+      --shadow-color: rgba(46, 90, 167, 0.3);
+      --border-radius: 16px;
+      --card-border-radius: 12px;
+      --sidebar-width: 280px;
+      --header-height: 70px;
+      --sidebar-collapsed-width: 70px;
+    }
+    
     body {
-      font-family: 'Noto Sans Devanagari', sans-serif;
-    }
-    
-    .sidebar {
+      font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+      background-color: #f5f7fa;
+      color: #333;
       min-height: 100vh;
-      background-color: #343a40;
-      padding-top: 20px;
+      overflow-x: hidden;
     }
     
-    .sidebar .nav-link {
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: var(--sidebar-width);
+      background: linear-gradient(180deg, #2e5aa7 0%, #1e4184 100%);
+      color: white;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    .sidebar.collapsed {
+      width: var(--sidebar-collapsed-width);
+    }
+    
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .sidebar.collapsed .sidebar-header h3 {
+      display: none;
+    }
+    
+    .sidebar-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      padding: 0;
+    }
+    
+    .sidebar.collapsed .sidebar-toggle {
+      transform: rotate(180deg);
+    }
+    
+    .sidebar-menu {
+      padding: 10px 0;
+      list-style: none;
+      margin: 0;
+    }
+    
+    .sidebar-menu li {
+      margin: 5px 0;
+    }
+    
+    .sidebar-menu a {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
       color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+    
+    .sidebar-menu a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .sidebar-menu a.active {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      border-left: 3px solid var(--accent-color);
+    }
+    
+    .sidebar-menu i {
+      margin-right: 15px;
+      font-size: 18px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .sidebar.collapsed .sidebar-menu span {
+      display: none;
+    }
+    
+    .sidebar-divider {
+      height: 1px;
+      margin: 10px 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Main Content Styles */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      transition: margin-left 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .main-content.expanded {
+      margin-left: var(--sidebar-collapsed-width);
+    }
+    
+    /* Header Styles */
+    .header {
+      height: var(--header-height);
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+    
+    .header-search {
+      position: relative;
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    .header-search input {
+      width: 100%;
+      padding: 10px 15px 10px 40px;
+      border-radius: 50px;
+      border: 1px solid #e9ecef;
+      background-color: #f8f9fa;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    
+    .header-search input:focus {
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(46, 90, 167, 0.1);
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
+    .header-search i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+    }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+    }
+    
+    .header-actions .btn {
+      margin-left: 10px;
+    }
+    
+    .user-dropdown {
+      position: relative;
+    }
+    
+    .user-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+    
+    .user-dropdown-toggle:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 10px;
+    }
+    
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .user-role {
+      font-size: 12px;
+      color: #6c757d;
+    }
+    
+    .user-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 10px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      width: 240px;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s;
+    }
+    
+    .user-dropdown.show .user-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .user-dropdown-header {
+      padding: 15px;
+      border-bottom: 1px solid #e9ecef;
+      text-align: center;
+    }
+    
+    .user-dropdown-header .user-avatar {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      margin: 0 auto 10px;
+    }
+    
+    .user-dropdown-header .user-name {
+      font-size: 16px;
       margin-bottom: 5px;
     }
     
-    .sidebar .nav-link:hover {
-      color: white;
+    .user-dropdown-body {
+      padding: 10px 0;
     }
     
-    .sidebar .nav-link.active {
-      background-color: #007bff;
-      color: white;
+    .user-dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      color: #333;
+      text-decoration: none;
+      transition: all 0.3s;
     }
     
-    main {
+    .user-dropdown-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .user-dropdown-item i {
+      margin-right: 10px;
+      font-size: 18px;
+      width: 20px;
+      text-align: center;
+      color: #6c757d;
+    }
+    
+    .user-dropdown-footer {
+      padding: 10px 15px;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    .user-dropdown-footer .btn {
+      width: 100%;
+    }
+    
+    /* Content Styles */
+    .content {
+      padding: 20px;
+      flex-grow: 1;
+    }
+    
+    .page-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--dark-color);
+    }
+    
+    /* Card Styles */
+    .dashboard-card {
+      background-color: white;
+      border-radius: var(--card-border-radius);
+      box-shadow: 
+        0 10px 20px rgba(0, 0, 0, 0.05),
+        0 6px 6px rgba(0, 0, 0, 0.03),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+      padding: 25px;
+      height: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
+    
+    .dashboard-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 
+        0 15px 30px rgba(0, 0, 0, 0.07),
+        0 10px 10px rgba(0, 0, 0, 0.04),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+    }
+    
+    .stats-card {
+      border-top: 4px solid var(--primary-color);
+    }
+    
+    .stats-card.success {
+      border-top-color: var(--accent-color);
+    }
+    
+    .stats-card.warning {
+      border-top-color: var(--warning-color);
+    }
+    
+    .stats-card.danger {
+      border-top-color: var(--danger-color);
+    }
+    
+    .stats-card.info {
+      border-top-color: var(--info-color);
+    }
+    
+    .stats-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background-color: rgba(46, 90, 167, 0.1);
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .stats-card.success .stats-icon {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--accent-color);
+    }
+    
+    .stats-card.warning .stats-icon {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .stats-card.danger .stats-icon {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger-color);
+    }
+    
+    .stats-card.info .stats-icon {
+      background-color: rgba(23, 162, 184, 0.1);
+      color: var(--info-color);
+    }
+    
+    .stats-title {
+      font-size: 14px;
+      color: #6c757d;
+      margin-bottom: 10px;
+    }
+    
+    .stats-value {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .stats-description {
+      font-size: 13px;
+      color: #6c757d;
+    }
+    
+    .stats-progress {
+      height: 8px;
+      margin-top: 15px;
+      background-color: #f5f7fa;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .stats-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #2e5aa7, #4481eb);
+      border-radius: 4px;
+    }
+    
+    .stats-card.success .stats-progress-bar {
+      background: linear-gradient(90deg, #28a745, #5dd879);
+    }
+    
+    .stats-card.warning .stats-progress-bar {
+      background: linear-gradient(90deg, #ffc107, #ffe083);
+    }
+    
+    .stats-card.danger .stats-progress-bar {
+      background: linear-gradient(90deg, #dc3545, #f27685);
+    }
+    
+    .stats-card.info .stats-progress-bar {
+      background: linear-gradient(90deg, #17a2b8, #5dcedf);
+    }
+    
+    /* Chart Card */
+    .chart-card {
+      padding: 20px;
+      height: 100%;
+    }
+    
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .chart-options .btn {
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+    
+    .chart-container {
+      height: 300px;
+    }
+    
+    /* Table Card */
+    .table-card {
+      padding: 0;
+      overflow: hidden;
+    }
+    
+    .table-card .card-header {
+      background-color: transparent;
+      border-bottom: 1px solid #e9ecef;
       padding: 20px;
     }
     
-    .navbar-brand img {
-      max-height: 30px;
-      margin-right: 10px;
+    .table-card .card-header h5 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    
+    .table-card .card-body {
+      padding: 0;
+    }
+    
+    .table-responsive {
+      overflow-x: auto;
+    }
+    
+    .data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    
+    .data-table th,
+    .data-table td {
+      padding: 15px 20px;
+      vertical-align: middle;
+      border-bottom: 1px solid #e9ecef;
+    }
+    
+    .data-table th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      color: #6c757d;
+    }
+    
+    .data-table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .status-badge {
+      padding: 5px 10px;
+      border-radius: 50px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    
+    .status-badge.success {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--accent-color);
+    }
+    
+    .status-badge.warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .status-badge.danger {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger-color);
+    }
+    
+    .status-badge.info {
+      background-color: rgba(23, 162, 184, 0.1);
+      color: var(--info-color);
+    }
+    
+    /* Modal Styles */
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid #e9ecef;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+    }
+    
+    .modal-title {
+      font-weight: 600;
+      font-size: 20px;
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .modal-footer {
+      border-top: 1px solid #e9ecef;
+      padding: 15px 20px;
+    }
+    
+    /* Form Styles */
+    .form-label {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #495057;
+    }
+    
+    .form-control {
+      height: auto;
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: 1px solid #ced4da;
+      transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.25rem rgba(46, 90, 167, 0.25);
+    }
+    
+    .form-text {
+      font-size: 12px;
+      color: #6c757d;
+    }
+    
+    /* Button Styles */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-primary:hover {
+      background-color: #1e4184;
+      border-color: #1e4184;
+    }
+    
+    .btn-success {
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+    
+    .btn-success:hover {
+      background-color: #218838;
+      border-color: #1e7e34;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      border-color: var(--danger-color);
+    }
+    
+    .btn-danger:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+    }
+    
+    .btn-outline-primary {
+      color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .btn-outline-primary:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    /* Footer Styles */
+    .footer {
+      background-color: white;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #6c757d;
+      border-top: 1px solid #e9ecef;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .sidebar {
+        width: var(--sidebar-collapsed-width);
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      
+      .sidebar-header h3,
+      .sidebar-menu span {
+        display: none;
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .main-content.expanded {
+        margin-left: 0;
+      }
+      
+      .header-title {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .user-info {
+        display: none;
+      }
+      
+      .header-search {
+        max-width: 200px;
+      }
+      
+      .stats-value {
+        font-size: 24px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .header-search {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Emblem_of_Chhattisgarh.svg" alt="Logo">
-        बीज परीक्षण पोर्टल
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h3>बीज नियंत्रण मॉड्यूल</h3>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="bi bi-chevron-left"></i>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-              <i class="bi bi-person-circle"></i> Admin
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">प्रोफाइल</a></li>
-              <li><a class="dropdown-item" href="#">सेटिंग्स</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="index.html">लॉगआउट</a></li>
-            </ul>
-          </li>
-        </ul>
+    </div>
+    
+    <ul class="sidebar-menu">
+      <li>
+        <a href="#" class="active" id="dashboardLink">
+          <i class="bi bi-grid-1x2"></i>
+          <span>डैशबोर्ड</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="seedSamplesLink">
+          <i class="bi bi-box"></i>
+          <span>बीज नमूने</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="inspectionReportLink">
+          <i class="bi bi-clipboard-check"></i>
+          <span>निरीक्षण प्रतिवेदन</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="inspectionReportForm2Link">
+          <i class="bi bi-clipboard-data"></i>
+          <span>प्रतिवेदन फॉर्म 2</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="inspectionReportForm3Link">
+          <i class="bi bi-clipboard-plus"></i>
+          <span>प्रतिवेदन फॉर्म 3</span>
+        </a>
+      </li>
+      
+      <div class="sidebar-divider"></div>
+      
+      <li>
+        <a href="#" id="reportsLink">
+          <i class="bi bi-bar-chart"></i>
+          <span>रिपोर्ट्स</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" id="settingsLink">
+          <i class="bi bi-gear"></i>
+          <span>सेटिंग्स</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-title">
+        डैशबोर्ड
+      </div>
+      
+      <div class="header-search">
+        <i class="bi bi-search"></i>
+        <input type="text" placeholder="खोजें...">
+      </div>
+      
+      <div class="header-actions">
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-toggle">
+            <div class="user-avatar" id="userAvatar">U</div>
+            <div class="user-info">
+              <div class="user-name" id="userName">उपयोगकर्ता</div>
+              <div class="user-role" id="userRole">भूमिका</div>
+            </div>
+            <i class="bi bi-chevron-down ms-2"></i>
+          </div>
+          
+          <div class="user-dropdown-menu">
+            <div class="user-dropdown-header">
+              <div class="user-avatar" id="userAvatarLarge">U</div>
+              <div class="user-name" id="userNameLarge">उपयोगकर्ता</div>
+              <div class="user-role" id="userRoleLarge">भूमिका</div>
+            </div>
+            
+            <div class="user-dropdown-body">
+              <a href="#" class="user-dropdown-item" data-bs-toggle="modal" data-bs-target="#profileModal">
+                <i class="bi bi-person"></i>
+                प्रोफाइल देखें
+              </a>
+              <a href="#" class="user-dropdown-item" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                <i class="bi bi-key"></i>
+                पासवर्ड बदलें
+              </a>
+              <a href="#" class="user-dropdown-item">
+                <i class="bi bi-gear"></i>
+                सेटिंग्स
+              </a>
+            </div>
+            
+            <div class="user-dropdown-footer">
+              <button class="btn btn-outline-danger" id="logoutBtn">
+                <i class="bi bi-box-arrow-right"></i>
+                लॉगआउट
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </nav>
-
-  <div class="container-fluid">
-    <div class="row">
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-        <div class="position-sticky pt-3">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">
-                डैशबोर्ड
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                बीज नमूने
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                निरीक्षण प्रतिवेदन
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                प्रतिवेदन फॉर्म 2
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                प्रतिवेदन फॉर्म 3
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                रिपोर्ट्स
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">
-                उपयोगकर्ता प्रबंधन
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">डैशबोर्ड</h1>
-          <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-              <button type="button" class="btn btn-sm btn-outline-secondary">शेयर</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">एक्सपोर्ट</button>
+    
+    <!-- Content -->
+    <div class="content">
+      <h1 class="page-title">डैशबोर्ड</h1>
+      
+      <!-- Stats Cards -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="dashboard-card stats-card">
+            <div class="stats-icon">
+              <i class="bi bi-box"></i>
+            </div>
+            <div class="stats-title">कुल नमूने</div>
+            <div class="stats-value">156</div>
+            <div class="stats-description">पिछले महीने से <span class="text-success">+12%</span></div>
+            <div class="stats-progress">
+              <div class="stats-progress-bar" style="width: 75%;"></div>
             </div>
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-md-3 mb-4">
-            <div class="card text-white bg-primary">
-              <div class="card-body">
-                <h5 class="card-title">कुल नमूने</h5>
-                <h1 class="display-4">156</h1>
-                <p class="card-text">पिछले महीने से +12%</p>
-              </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="dashboard-card stats-card success">
+            <div class="stats-icon">
+              <i class="bi bi-check-circle"></i>
             </div>
-          </div>
-          
-          <div class="col-md-3 mb-4">
-            <div class="card text-white bg-success">
-              <div class="card-body">
-                <h5 class="card-title">मानक नमूने</h5>
-                <h1 class="display-4">128</h1>
-                <p class="card-text">कुल का 82%</p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col-md-3 mb-4">
-            <div class="card text-white bg-danger">
-              <div class="card-body">
-                <h5 class="card-title">अमानक नमूने</h5>
-                <h1 class="display-4">28</h1>
-                <p class="card-text">कुल का 18%</p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="col-md-3 mb-4">
-            <div class="card text-white bg-info">
-              <div class="card-body">
-                <h5 class="card-title">प्रक्रियाधीन</h5>
-                <h1 class="display-4">42</h1>
-                <p class="card-text">अभी विश्लेषण हेतु शेष</p>
-              </div>
+            <div class="stats-title">मानक नमूने</div>
+            <div class="stats-value">128</div>
+            <div class="stats-description">कुल नमूनों का <span class="text-success">82%</span></div>
+            <div class="stats-progress">
+              <div class="stats-progress-bar" style="width: 82%;"></div>
             </div>
           </div>
         </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="dashboard-card stats-card danger">
+            <div class="stats-icon">
+              <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="stats-title">अमानक नमूने</div>
+            <div class="stats-value">28</div>
+            <div class="stats-description">कुल नमूनों का <span class="text-danger">18%</span></div>
+            <div class="stats-progress">
+              <div class="stats-progress-bar" style="width: 18%;"></div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+          <div class="dashboard-card stats-card warning">
+            <div class="stats-icon">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div class="stats-title">प्रक्रियाधीन</div>
+            <div class="stats-value">42</div>
+            <div class="stats-description">अभी विश्लेषण हेतु शेष</div>
+            <div class="stats-progress">
+              <div class="stats-progress-bar" style="width: 42%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+<!-- Charts Row -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="dashboard-card chart-card">
+      <div class="chart-header">
+        <div class="chart-title">नमूना विश्लेषण रुझान</div>
+        <div class="chart-options">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-sm btn-outline-secondary active">सप्ताहिक</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">मासिक</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary">वार्षिक</button>
+          </div>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="samplesChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-4">
+    <div class="dashboard-card chart-card">
+      <div class="chart-header">
+        <div class="chart-title">नमूना वितरण</div>
+        <div class="chart-options">
+          <button type="button" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="distributionChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <h2>हालिया नमूने</h2>
+<!-- Recent Samples Table -->
+<div class="row g-4">
+  <div class="col-12">
+    <div class="dashboard-card table-card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>हालिया नमूने</h5>
+        <button class="btn btn-sm btn-primary">
+          <i class="bi bi-plus-lg"></i> नया नमूना
+        </button>
+      </div>
+      <div class="card-body">
         <div class="table-responsive">
-          <table class="table table-striped table-sm">
+          <table class="data-table">
             <thead>
               <tr>
                 <th>क्र.</th>
@@ -185,6 +992,7 @@
                 <th>कुल नमूने</th>
                 <th>स्थिति</th>
                 <th>दिनांक</th>
+                <th>कार्य</th>
               </tr>
             </thead>
             <tbody>
@@ -193,54 +1001,626 @@
                 <td>रायपुर</td>
                 <td>50</td>
                 <td>42</td>
-                <td><span class="badge bg-success">पूर्ण</span></td>
+                <td><span class="status-badge success">पूर्ण</span></td>
                 <td>15/07/2023</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>दुर्ग</td>
                 <td>45</td>
                 <td>38</td>
-                <td><span class="badge bg-warning text-dark">प्रक्रियाधीन</span></td>
+                <td><span class="status-badge warning">प्रक्रियाधीन</span></td>
                 <td>12/07/2023</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td>3</td>
                 <td>बिलासपुर</td>
                 <td>40</td>
                 <td>35</td>
-                <td><span class="badge bg-success">पूर्ण</span></td>
+                <td><span class="status-badge success">पूर्ण</span></td>
                 <td>10/07/2023</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td>4</td>
                 <td>राजनांदगांव</td>
                 <td>30</td>
                 <td>20</td>
-                <td><span class="badge bg-warning text-dark">प्रक्रियाधीन</span></td>
+                <td><span class="status-badge warning">प्रक्रियाधीन</span></td>
                 <td>08/07/2023</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
               </tr>
               <tr>
                 <td>5</td>
                 <td>जगदलपुर</td>
                 <td>25</td>
                 <td>21</td>
-                <td><span class="badge bg-danger">अमानक</span></td>
+                <td><span class="status-badge danger">अमानक</span></td>
                 <td>05/07/2023</td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-primary">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-secondary">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </main>
+      </div>
+    </div>
+  </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+      <div>&copy; 2023 कृषि विभाग, छत्तीसगढ़ शासन। सर्वाधिकार सुरक्षित।</div>
+    </div>
+  </div>
+  
+  <!-- Profile Modal -->
+  <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="profileModalLabel">प्रोफाइल</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center mb-4">
+            <div class="user-avatar mx-auto mb-3" style="width: 80px; height: 80px; font-size: 32px;" id="profileAvatar">U</div>
+            <h4 class="mb-1" id="profileName">उपयोगकर्ता</h4>
+            <p class="text-muted" id="profileRole">भूमिका</p>
+          </div>
+          
+          <form id="profileForm">
+            <div class="mb-3">
+              <label for="fullName" class="form-label">पूरा नाम</label>
+              <input type="text" class="form-control" id="fullName" readonly>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="username" class="form-label">उपयोगकर्ता नाम</label>
+                <input type="text" class="form-control" id="username" readonly>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="role" class="form-label">भूमिका</label>
+                <input type="text" class="form-control" id="role" readonly>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="email" class="form-label">ईमेल</label>
+              <input type="email" class="form-control" id="email">
+            </div>
+            
+            <div class="mb-3">
+              <label for="phone" class="form-label">फोन नंबर</label>
+              <input type="tel" class="form-control" id="phone">
+            </div>
+            
+            <div id="districtField" class="mb-3 d-none">
+              <label for="district" class="form-label">जिला</label>
+              <input type="text" class="form-control" id="district" readonly>
+            </div>
+            
+            <div id="divisionField" class="mb-3 d-none">
+              <label for="division" class="form-label">संभाग</label>
+              <input type="text" class="form-control" id="division" readonly>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">बंद करें</button>
+          <button type="button" class="btn btn-primary" id="saveProfileBtn">सेव करें</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Change Password Modal -->
+  <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">पासवर्ड बदलें</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            सुरक्षा कारणों से, कृपया एक मजबूत पासवर्ड चुनें जिसमें अक्षर, संख्या और विशेष वर्ण हों।
+          </div>
+          
+          <form id="changePasswordForm">
+            <div class="mb-3">
+              <label for="currentPassword" class="form-label">वर्तमान पासवर्ड</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="currentPassword" required>
+                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="currentPassword">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">नया पासवर्ड</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="newPassword" required>
+                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="newPassword">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+              <div class="password-strength mt-2">
+                <div class="progress" style="height: 5px;">
+                  <div class="progress-bar" id="passwordStrengthBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <small class="form-text" id="passwordStrengthText">पासवर्ड की मजबूती</small>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">पासवर्ड की पुष्टि करें</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="confirmPassword" required>
+                <button class="btn btn-outline-secondary toggle-password" type="button" data-target="confirmPassword">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+              <div id="passwordMatch" class="form-text"></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">रद्द करें</button>
+          <button type="button" class="btn btn-primary" id="changePasswordBtn">पासवर्ड अपडेट करें</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Logout Confirmation Modal -->
+  <div class="modal fade" id="logoutConfirmModal" tabindex="-1" aria-labelledby="logoutConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutConfirmModalLabel">लॉगआउट की पुष्टि करें</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>क्या आप वाकई लॉगआउट करना चाहते हैं?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">रद्द करें</button>
+          <button type="button" class="btn btn-danger" id="confirmLogoutBtn">लॉगआउट करें</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   
-  <!-- jQuery and DataTables JS -->
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+  
+  <script>
+    // Check if user is logged in
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+      
+      if (!currentUser) {
+        // Redirect to login page if not logged in
+        window.location.href = 'index.html';
+        return;
+      }
+      
+      // Set user information
+      setUserInfo(currentUser);
+      
+      // Initialize UI components
+      initializeSidebar();
+      initializeUserDropdown();
+      initializeCharts();
+      initializePasswordFields();
+      
+      // Setup event listeners
+      setupEventListeners();
+      
+      // Load profile data
+      loadProfileData(currentUser);
+    });
+    
+    // Set user information in UI
+    function setUserInfo(user) {
+      // Set user name and initials
+      const nameElements = document.querySelectorAll('#userName, #userNameLarge');
+      const roleElements = document.querySelectorAll('#userRole, #userRoleLarge');
+      const avatarElements = document.querySelectorAll('#userAvatar, #userAvatarLarge, #profileAvatar');
+      
+      nameElements.forEach(el => el.textContent = user.fullName);
+      
+      // Set role in Hindi
+      const roleMap = {
+        'state_admin': 'राज्य प्रशासक',
+        'division_officer': 'संभागीय अधिकारी',
+        'district_officer': 'जिला अधिकारी',
+        'seed_certification_agency': 'बीज प्रमाणीकरण संस्था'
+      };
+      
+      roleElements.forEach(el => el.textContent = roleMap[user.role] || user.role);
+      
+      // Set avatar initial
+      const initial = user.fullName.charAt(0).toUpperCase();
+      avatarElements.forEach(el => el.textContent = initial);
+    }
+    
+    // Initialize sidebar
+    function initializeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      
+      sidebarToggle.addEventListener('click', function() {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('expanded');
+      });
+      
+      // Collapse sidebar on mobile by default
+      if (window.innerWidth < 992) {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('expanded');
+      }
+    }
+    
+    // Initialize user dropdown
+    function initializeUserDropdown() {
+      const userDropdown = document.getElementById('userDropdown');
+      
+      userDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+        userDropdown.classList.toggle('show');
+      });
+      
+      document.addEventListener('click', function(e) {
+        if (!userDropdown.contains(e.target)) {
+          userDropdown.classList.remove('show');
+        }
+      });
+    }
+    
+    // Initialize charts
+    function initializeCharts() {
+      // Samples Chart
+      const samplesCtx = document.getElementById('samplesChart').getContext('2d');
+      const samplesChart = new Chart(samplesCtx, {
+        type: 'line',
+        data: {
+          labels: ['जनवरी', 'फरवरी', 'मार्च', 'अप्रैल', 'मई', 'जून', 'जुलाई'],
+          datasets: [
+            {
+              label: 'कुल नमूने',
+              data: [65, 59, 80, 81, 56, 55, 40],
+              borderColor: '#2e5aa7',
+              backgroundColor: 'rgba(46, 90, 167, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'मानक नमूने',
+              data: [45, 49, 60, 71, 46, 45, 30],
+              borderColor: '#28a745',
+              backgroundColor: 'rgba(40, 167, 69, 0.1)',
+              tension: 0.4,
+              fill: true
+            },
+            {
+              label: 'अमानक नमूने',
+              data: [20, 10, 20, 10, 10, 10, 10],
+              borderColor: '#dc3545',
+              backgroundColor: 'rgba(220, 53, 69, 0.1)',
+              tension: 0.4,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+      
+      // Distribution Chart
+      const distributionCtx = document.getElementById('distributionChart').getContext('2d');
+      const distributionChart = new Chart(distributionCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['मानक', 'अमानक', 'प्रक्रियाधीन'],
+          datasets: [{
+            data: [128, 28, 42],
+            backgroundColor: [
+              '#28a745',
+              '#dc3545',
+              '#ffc107'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+    
+    // Initialize password fields
+    function initializePasswordFields() {
+      // Toggle password visibility
+      document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          const passwordInput = document.getElementById(targetId);
+          
+          if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            this.innerHTML = '<i class="bi bi-eye-slash"></i>';
+          } else {
+            passwordInput.type = 'password';
+            this.innerHTML = '<i class="bi bi-eye"></i>';
+          }
+        });
+      });
+      
+      // Password strength meter
+      const newPassword = document.getElementById('newPassword');
+      const strengthBar = document.getElementById('passwordStrengthBar');
+      const strengthText = document.getElementById('passwordStrengthText');
+      
+      newPassword.addEventListener('input', function() {
+        const strength = calculatePasswordStrength(this.value);
+        
+        strengthBar.style.width = strength.percent + '%';
+        strengthBar.className = 'progress-bar bg-' + strength.class;
+        strengthText.textContent = strength.message;
+      });
+      
+      // Password match validation
+      const confirmPassword = document.getElementById('confirmPassword');
+      const passwordMatch = document.getElementById('passwordMatch');
+      
+      confirmPassword.addEventListener('input', function() {
+        if (this.value === '') {
+          passwordMatch.textContent = '';
+          return;
+        }
+        
+        if (this.value === newPassword.value) {
+          passwordMatch.textContent = 'पासवर्ड मैच करते हैं';
+          passwordMatch.className = 'form-text text-success';
+        } else {
+          passwordMatch.textContent = 'पासवर्ड मैच नहीं करते';
+          passwordMatch.className = 'form-text text-danger';
+        }
+      });
+    }
+    
+    // Calculate password strength
+    function calculatePasswordStrength(password) {
+      let strength = 0;
+      
+      if (password.length >= 8) strength += 25;
+      if (password.match(/[a-z]+/)) strength += 25;
+      if (password.match(/[A-Z]+/)) strength += 25;
+      if (password.match(/[0-9]+/)) strength += 15;
+      if (password.match(/[^a-zA-Z0-9]+/)) strength += 10;
+      
+      let strengthClass = 'danger';
+      let message = 'कमजोर';
+      
+      if (strength >= 80) {
+        strengthClass = 'success';
+        message = 'मजबूत';
+      } else if (strength >= 50) {
+        strengthClass = 'warning';
+        message = 'मध्यम';
+      }
+      
+      return {
+        percent: strength,
+        class: strengthClass,
+        message: message
+      };
+    }
+    
+    // Setup event listeners
+    function setupEventListeners() {
+      // Logout button
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        const logoutModal = new bootstrap.Modal(document.getElementById('logoutConfirmModal'));
+        logoutModal.show();
+      });
+      
+      // Confirm logout
+      document.getElementById('confirmLogoutBtn').addEventListener('click', function() {
+        sessionStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      });
+      
+      // Save profile button
+      document.getElementById('saveProfileBtn').addEventListener('click', function() {
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        
+        // Update user data in session storage
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        currentUser.email = email;
+        currentUser.phone = phone;
+        
+        sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        
+        // Show success message
+        alert('प्रोफाइल सफलतापूर्वक अपडेट की गई!');
+        
+        // Close modal
+        const profileModal = bootstrap.Modal.getInstance(document.getElementById('profileModal'));
+        profileModal.hide();
+      });
+      
+      // Change password button
+      document.getElementById('changePasswordBtn').addEventListener('click', function() {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        // Validate inputs
+        if (!currentPassword || !newPassword || !confirmPassword) {
+          alert('कृपया सभी फील्ड भरें');
+          return;
+        }
+        
+        if (newPassword !== confirmPassword) {
+          alert('नया पासवर्ड और पुष्टि पासवर्ड मैच नहीं करते');
+          return;
+        }
+        
+        // In a real application, you would verify the current password and update it on the server
+        // For this demo, we'll just show a success message
+        
+        alert('पासवर्ड सफलतापूर्वक अपडेट किया गया!');
+        
+        // Close modal
+        const passwordModal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+        passwordModal.hide();
+        
+        // Reset form
+        document.getElementById('changePasswordForm').reset();
+      });
+      
+      // Navigation links
+      document.getElementById('dashboardLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        setActiveNavLink(this);
+        // In a real application, you would load dashboard content here
+      });
+      
+      document.getElementById('seedSamplesLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        setActiveNavLink(this);
+        // In a real application, you would load seed samples content here
+      });
+      
+      document.getElementById('inspectionReportLink').addEventListener('click', function(e) {
+        e.preventDefault();
+        setActiveNavLink(this);
+        // In a real application, you would load inspection report content here
+      });
+      
+      document.getElementById('inspectionReportForm2Link').addEventListener('click', function(e) {
+        e.preventDefault();
+        setActiveNavLink(this);
+        // In a real application, you would load form 2 content here
+      });
+      
+      document.getElementById('inspectionReportForm3Link').addEventListener('click', function(e) {
+        e.preventDefault();
+        setActiveNavLink(this);
+        // In a real application, you would load form 3 content here
+      });
+    }
+    
+    // Set active navigation link
+    function setActiveNavLink(link) {
+      document.querySelectorAll('.sidebar-menu a').forEach(el => {
+        el.classList.remove('active');
+      });
+      
+      link.classList.add('active');
+    }
+    
+    // Load profile data
+    function loadProfileData(user) {
+      document.getElementById('fullName').value = user.fullName;
+      document.getElementById('username').value = user.username;
+      document.getElementById('role').value = user.role;
+      document.getElementById('email').value = user.email || '';
+      document.getElementById('phone').value = user.phone || '';
+      
+      // Show district field if user is district officer
+      if (user.district) {
+        document.getElementById('districtField').classList.remove('d-none');
+        document.getElementById('district').value = user.district;
+      }
+      
+      // Show division field if user is division officer
+      if (user.division) {
+        document.getElementById('divisionField').classList.remove('d-none');
+        document.getElementById('division').value = user.division;
+      }
+    }
+  </script>
 </body>
 </html>
+
+
