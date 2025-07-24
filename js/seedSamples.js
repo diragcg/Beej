@@ -56,10 +56,13 @@ const SeedSamples = {
         .order('id', { ascending: false }); // Order by ID descending
       
       // Filter data based on user's access
-      const filteredData = AccessControl.filterDataByAccess(await query, 'जिला');
+      const { data, error } = await query;
       
-      // Check if data is an object or an array and extract the data property accordingly
-      const seedSamples = Array.isArray(filteredData) ? filteredData : filteredData.data;
+      if (error) {
+        throw new Error(error.message);
+      }
+      
+      const seedSamples = AccessControl.filterDataByAccess(data, 'जिला');
       
       // Render the seed samples table
       this.renderSeedSamplesTable(seedSamples);
@@ -171,7 +174,7 @@ const SeedSamples = {
       tableHTML += `
         <tr>
           <td>${index + 1}</td>
-          <td>${sample.district}</td>
+          <td>${sample.जिला}</td>
           <td>${sample.proposed_target}</td>
           <td>${sample.total_samples_taken}</td>
           <td>${sample.samples_sent_to_lab}</td>
@@ -224,7 +227,7 @@ const SeedSamples = {
     
     // Create data object
     const sampleData = {
-      district: district,
+      जिला: district,
       proposed_target: proposedTarget,
       total_samples_taken: totalSamplesTaken,
       samples_sent_to_lab: samplesSentToLab,
