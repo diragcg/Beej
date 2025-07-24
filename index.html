@@ -670,65 +670,85 @@
           }
         }, 10);
       });
-      
-      // Handle form submission
-      document.getElementById('loginForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const userType = document.getElementById('userType').value;
-        const password = document.getElementById('password').value;
-        
-        if (!userType) {
-          const errorDiv = document.getElementById('loginError');
-          errorDiv.textContent = 'कृपया उपयोगकर्ता प्रकार चुनें।';
-          errorDiv.classList.remove('d-none');
-          return;
-        }
-        
-        // Show loading state
-        const submitBtn = document.querySelector('.btn-login');
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> लॉगिन हो रहा है...';
-        
-        const result = await authenticateUser(userType, password);
-        
-        // Restore button state
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtnText;
-        
-        if (result.success) {
-          // Store user info in session storage
-          sessionStorage.setItem('currentUser', JSON.stringify(result.user));
-          
-          // Show success message briefly
-          const errorDiv = document.getElementById('loginError');
-          errorDiv.textContent = 'लॉगिन सफल! अब आपको डैशबोर्ड पर निर्देशित किया जा रहा है...';
-          errorDiv.classList.remove('d-none', 'alert-danger');
-          errorDiv.classList.add('alert-success');
-          
-          // Remember user if checkbox is checked
-          if (document.getElementById('rememberMe').checked) {
-            localStorage.setItem('rememberedUser', userType);
-          } else {
-            localStorage.removeItem('rememberedUser');
-          }
-          
-          // Redirect to dashboard after a brief delay
-          setTimeout(() => {
-            window.location.href = 'dashboard.html';
-          }, 1000);
-        } else {
-          const errorDiv = document.getElementById('loginError');
-          errorDiv.textContent = result.message || 'अमान्य उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।';
-          errorDiv.classList.remove('d-none', 'alert-success');
-          errorDiv.classList.add('alert-danger');
-          
-          // Focus on password field
-          document.getElementById('password').focus();
-        }
-      });
-      
+// Update this part in your index.html file, replacing the existing event listener for the login form
+
+// Handle form submission
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const userType = document.getElementById('userType').value;
+  const password = document.getElementById('password').value;
+  
+  // Basic validation
+  if (!userType) {
+    const errorDiv = document.getElementById('loginError');
+    errorDiv.textContent = 'कृपया उपयोगकर्ता प्रकार चुनें।';
+    errorDiv.classList.remove('d-none');
+    errorDiv.classList.add('alert-danger');
+    return;
+  }
+  
+  // Show loading state
+  const submitBtn = document.querySelector('.btn-login');
+  const originalBtnText = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> लॉगिन हो रहा है...';
+  
+  // Simple authentication for demonstration
+  // In a real app, you would call your authenticateUser function here
+  if (userPasswords[userType] && userPasswords[userType] === password) {
+    // Create user object
+    const user = {
+      username: userType,
+      role: userRoles[userType],
+      fullName: userFullNames[userType]
+    };
+    
+    // Add district/division info if applicable
+    if (user.role === 'district_officer') {
+      const districtName = user.fullName.split(' - ')[1];
+      user.district = districtName;
+      user.division = districtToDivision[districtName];
+    } else if (user.role === 'division_officer') {
+      const divisionName = user.fullName.split(' - ')[1];
+      user.division = divisionName;
+    }
+    
+    // Store user in session storage
+    sessionStorage.setItem('currentUser', JSON.stringify(user));
+    
+    // Show success message
+    const errorDiv = document.getElementById('loginError');
+    errorDiv.textContent = 'लॉगिन सफल! अब आपको डैशबोर्ड पर निर्देशित किया जा रहा है...';
+    errorDiv.classList.remove('d-none', 'alert-danger');
+    errorDiv.classList.add('alert-success');
+    
+    // Remember user if checkbox is checked
+    if (document.getElementById('rememberMe').checked) {
+      localStorage.setItem('rememberedUser', userType);
+    } else {
+      localStorage.removeItem('rememberedUser');
+    }
+    
+    // Redirect to dashboard after a brief delay
+    setTimeout(function() {
+      window.location.href = 'dashboard.html';
+    }, 1000);
+  } else {
+    // Authentication failed
+    const errorDiv = document.getElementById('loginError');
+    errorDiv.textContent = 'अमान्य उपयोगकर्ता नाम या पासवर्ड। कृपया पुनः प्रयास करें।';
+    errorDiv.classList.remove('d-none', 'alert-success');
+    errorDiv.classList.add('alert-danger');
+    
+    // Reset button state
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+    
+    // Focus on password field
+    document.getElementById('password').focus();
+  }
+});
       // Check for remembered user
       const rememberedUser = localStorage.getItem('rememberedUser');
       if (rememberedUser) {
