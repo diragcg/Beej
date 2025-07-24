@@ -111,24 +111,7 @@
               </tr>
             </thead>
             <tbody id="inspectionReportTableBody">
-              <!-- Sample data will be loaded here -->
-              <tr>
-                <td>1</td>
-                <td>रायपुर</td>
-                <td>50</td>
-                <td>जॉन डो</td>
-                <td>अमर बीज भंडार</td>
-                <td>2</td>
-                <td>सब ठीक है</td>
-                <td>
-                  <button class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-eye"></i>
-                  </button>
-                  <button class="btn btn-sm btn-outline-secondary">
-                    <i class="bi bi-pencil"></i>
-                  </button>
-                </td>
-              </tr>
+              
             </tbody>
           </table>
         </div>
@@ -144,82 +127,6 @@
   <script src="../js/auth.js"></script>
   <script src="../js/inspectionReport.js"></script>
   
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Check if user is logged in
-      if (!Auth.currentUser) {
-        window.location.href = '../index.html';
-        return;
-      }
-      
-      // Initialize the form
-      const inspectionReportForm = document.getElementById('inspectionReportForm');
-      inspectionReportForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form values
-        const districtName = document.getElementById('districtName').value;
-        const totalSeedSaleCenters = document.getElementById('totalSeedSaleCenters').value;
-        const seedInspectorName = document.getElementById('seedInspectorName').value;
-        const seedSaleCenterName = document.getElementById('seedSaleCenterName').value;
-        const causeNotice = document.getElementById('causeNotice').value;
-        const saleRestriction = document.getElementById('saleRestriction').value;
-        const licenseRevoked = document.getElementById('licenseRevoked').value;
-        const firCount = document.getElementById('firCount').value;
-        const totalActions = document.getElementById('totalActions').value;
-        const remark = document.getElementById('remark').value;
-        
-        // Create data object
-        const reportData = {
-          districtName: districtName,
-          totalSeedSaleCenters: totalSeedSaleCenters,
-          seedInspectorName: seedInspectorName,
-          seedSaleCenterName: seedSaleCenterName,
-          causeNotice: causeNotice,
-          saleRestriction: saleRestriction,
-          licenseRevoked: licenseRevoked,
-          firCount: firCount,
-          totalActions: totalActions,
-          remark: remark
-        };
-        
-        // Log data
-        console.log('Report Data:', reportData);
-        
-        // Add row to table
-        const tableBody = document.getElementById('inspectionReportTableBody');
-        const newRow = tableBody.insertRow();
-        
-        const cell1 = newRow.insertCell(0);
-        const cell2 = newRow.insertCell(1);
-        const cell3 = newRow.insertCell(2);
-        const cell4 = newRow.insertCell(3);
-        const cell5 = newRow.insertCell(4);
-        const cell6 = newRow.insertCell(5);
-        const cell7 = newRow.insertCell(6);
-        const cell8 = newRow.insertCell(7);
-        
-        cell1.textContent = tableBody.rows.length;
-        cell2.textContent = districtName;
-        cell3.textContent = totalSeedSaleCenters;
-        cell4.textContent = seedInspectorName;
-        cell5.textContent = seedSaleCenterName;
-        cell6.textContent = totalActions;
-        cell7.textContent = remark;
-        cell8.innerHTML = `
-          <button class="btn btn-sm btn-outline-primary">
-            <i class="bi bi-eye"></i>
-          </button>
-          <button class="btn btn-sm btn-outline-secondary">
-            <i class="bi bi-pencil"></i>
-          </button>
-        `;
-        
-        // Clear form
-        inspectionReportForm.reset();
-      });
-    });
-  </script>
+  
 </body>
 </html>
-
